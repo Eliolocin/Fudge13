@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LLM-as-Judge Translation Interface</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>LLM-as-Judge Translation Interface</h1>
+            <p>Evaluate English-to-Filipino translations using AI</p>
+        </header>
+
+        <main class="main-content">
+            <!-- Column A: Prompts -->
+            <div class="column column-a">                <div class="section">
+                    <h2>Prompt Picker</h2>
+                    <div id="prompt-buttons" class="prompt-buttons">
+                        <div class="loading-prompts">Loading prompts</div>
+                    </div>
+                </div>                <div class="section">
+                    <h2>System Prompt <span class="required">*</span></h2>
+                    <textarea 
+                        id="system-prompt" 
+                        class="large-textarea" 
+                        placeholder="Enter your system prompt here. Use tokens like {{source_text}} and {{fil_translation}} for dynamic replacement."
+                        rows="12"
+                    ></textarea><div class="integrated-token-legend">
+                        <div class="token-grid">
+                            <div class="token-item" data-token="source_text">
+                                <div class="token-details">
+                                    <span class="description">English source text</span>
+                                    <div class="token-usage-info">
+                                        <span>Copy this token into your prompt</span>
+                                        <span class="token-status missing">Required</span>
+                                    </div>
+                                </div>
+                                <div class="token-copy-section">
+                                    <span class="token-string">&#123;&#123;source_text&#125;&#125;</span>
+                                    <button class="copy-btn" data-token="&#123;&#123;source_text&#125;&#125;">Copy</button>
+                                </div>
+                            </div>
+                            <div class="token-item" data-token="fil_translation">
+                                <div class="token-details">
+                                    <span class="description">Filipino translation to judge</span>
+                                    <div class="token-usage-info">
+                                        <span>Copy this token into your prompt</span>
+                                        <span class="token-status missing">Required</span>
+                                    </div>
+                                </div>
+                                <div class="token-copy-section">
+                                    <span class="token-string">&#123;&#123;fil_translation&#125;&#125;</span>
+                                    <button class="copy-btn" data-token="&#123;&#123;fil_translation&#125;&#125;">Copy</button>
+                                </div>
+                            </div>
+                            <div class="token-item" data-token="ref_translation">
+                                <div class="token-details">
+                                    <span class="description">Optional reference translation</span>
+                                    <div class="token-usage-info">
+                                        <span>Copy this token into your prompt</span>
+                                        <span class="token-status missing">Optional</span>
+                                    </div>
+                                </div>
+                                <div class="token-copy-section">
+                                    <span class="token-string">&#123;&#123;ref_translation&#125;&#125;</span>
+                                    <button class="copy-btn" data-token="&#123;&#123;ref_translation&#125;&#125;">Copy</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h2>LLM Picker</h2>
+                    <select id="llm-picker" class="llm-dropdown">
+                        <option value="gemini-2.5-flash-preview-05-20" data-provider="google">Gemini 2.5 Flash</option>
+                        <option value="gemini-2.5-pro" data-provider="google">Gemini 2.5 Pro</option>
+                        <option value="gemini-1.5-flash" data-provider="google">Gemini 1.5 Flash</option>
+                        <option value="gpt-4o" data-provider="openai">GPT-4o</option>
+                        <option value="gpt-4o-mini" data-provider="openai">GPT-4o Mini</option>
+                        <option value="gpt-4.1-nano" data-provider="openai">GPT-4.1 Nano</option>
+                    </select>
+                    <div id="llm-info" class="llm-info">
+                        <strong>Provider:</strong> <span class="provider-badge provider-google">Google</span><br>
+                        <strong>Model:</strong> gemini-2.0-flash-exp<br>
+                        <strong>Capabilities:</strong> Structured output, fast inference
+                    </div>
+                </div>
+            </div>            <!-- Column B: Text to be Judged -->
+            <div class="column column-b">                <div class="section">
+                    <h2>Source Text <span class="required">*</span></h2>
+                    <textarea 
+                        id="source-text" 
+                        class="large-textarea" 
+                        placeholder="Enter the English text that needs to be translated..."
+                        rows="8"
+                        required
+                    ></textarea>
+                </div>
+
+                <div class="section">
+                    <h2>Filipino Translation <span class="required">*</span></h2>
+                    <textarea 
+                        id="fil-translation" 
+                        class="large-textarea" 
+                        placeholder="Enter the Filipino translation to be judged..."
+                        rows="8"
+                        required
+                    ></textarea>
+                </div>                <div class="section">
+                    <h2>Reference Translation <span class="optional">(Optional)</span></h2>
+                    <textarea 
+                        id="ref-translation" 
+                        class="large-textarea" 
+                        placeholder="Enter a reference translation for comparison (optional)..."
+                        rows="6"
+                    ></textarea>
+                </div><div class="section">
+                    <button id="judge-btn" class="judge-button disabled">
+                        <span class="btn-text">Judge Translation</span>
+                        <span class="btn-loading">Judging...</span>
+                    </button>
+                    <div class="validation-summary error">
+                        <i class="fas fa-exclamation-triangle"></i> Please fill in all required fields
+                    </div>
+                </div>
+            </div>
+
+            <!-- Column C: Results -->
+            <div class="column column-c">
+                <div class="section">
+                    <h2>Results</h2>
+                    <div id="results-container" class="results-container">
+                        <div class="no-results">
+                            <p>Click "Judge Translation" to see evaluation results here.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal for explanations -->
+    <div id="explanation-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modal-title">Explanation</h3>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <p id="modal-explanation"></p>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
