@@ -186,3 +186,5 @@ results/
 
 # Environment variables
 .env
+.claude/
+CLAUDE.md

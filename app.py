@@ -3,8 +3,9 @@ import os
 import json
 from datetime import datetime
 from dotenv import load_dotenv
-from utils.llm_clients import create_llm_client
-from utils.prompt_utils import replace_tokens, validate_tokens, calculate_final_score
+from llms.prompt_engineered_judge_main import create_llm_client
+from utils.prompt_utils import replace_tokens, validate_tokens
+from utils.eval_utils import calculate_final_score
 
 # Load environment variables
 load_dotenv()
@@ -149,10 +150,14 @@ def judge_translation():
 def save_judgment_results(request_data, llm_response, final_score_data, raw_prompt):
     """Save complete judgment results to a timestamped JSON file in ./results folder"""
     try:
+        # Ensure results directory exists
+        results_dir = "results"
+        os.makedirs(results_dir, exist_ok=True)
+        
         # Create timestamp for filename
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S_%f")[:-3]  # Include milliseconds
         filename = f"judgment_{timestamp}.json"
-        filepath = os.path.join("results", filename)
+        filepath = os.path.join(results_dir, filename)
         
         # Prepare complete results data
         results_data = {
