@@ -13,6 +13,10 @@ class LLMJudgeApp {    constructor() {
         this.systemPrompt = document.getElementById('system-prompt');
         this.llmPicker = document.getElementById('llm-picker');
         this.llmInfo = document.getElementById('llm-info');
+        
+        // Agentic mode elements
+        this.agenticModeContainer = document.getElementById('agentic-mode-container');
+        this.agenticModeToggle = document.getElementById('agentic-mode-toggle');
 
         // Token legend elements
         this.tokenItems = document.querySelectorAll('.token-item');
@@ -55,7 +59,12 @@ class LLMJudgeApp {    constructor() {
         this.systemPrompt.addEventListener('input', () => this.updateTokenStatus());
 
         // LLM picker change
-        this.llmPicker.addEventListener('change', () => this.updateLLMInfo());        // Real-time validation for text inputs (simplified - no visual effects)
+        this.llmPicker.addEventListener('change', () => this.updateLLMInfo());
+        
+        // Agentic mode toggle change
+        this.agenticModeToggle.addEventListener('change', () => this.updateLLMInfo());
+        
+        // Real-time validation for text inputs (simplified - no visual effects)
         this.sourceText.addEventListener('input', () => this.updateValidationSummary());
         this.filTranslation.addEventListener('input', () => this.updateValidationSummary());
         this.refTranslation.addEventListener('input', () => this.updateValidationSummary());
@@ -247,6 +256,22 @@ class LLMJudgeApp {    constructor() {
         const model = selectedOption.value;
         const provider = selectedOption.dataset.provider;
         
+        // Check if current model supports agentic features (Gemini 2.5 series)
+        const agenticSupportedModels = [
+            'gemini-2.5-pro',
+            'gemini-2.5-flash',
+            'gemini-2.5-flash-preview-05-20'
+        ];
+        const isAgenticSupported = provider === 'google' && agenticSupportedModels.includes(model);
+        
+        // Show/hide agentic mode toggle based on model support
+        if (isAgenticSupported) {
+            this.agenticModeContainer.style.display = 'block';
+        } else {
+            this.agenticModeContainer.style.display = 'none';
+            this.agenticModeToggle.checked = false; // Reset toggle when not supported
+        }
+        
         const providerInfo = {
             google: {
                 name: 'Google',
@@ -261,10 +286,17 @@ class LLMJudgeApp {    constructor() {
         };
 
         const info = providerInfo[provider];
+        let capabilities = info.capabilities;
+        
+        // Add agentic capabilities if enabled
+        if (isAgenticSupported && this.agenticModeToggle.checked) {
+            capabilities += ', Google Search grounding, Thought summaries';
+        }
+        
         this.llmInfo.innerHTML = `
             <strong>Provider:</strong> <span class="provider-badge ${info.badge}">${info.name}</span><br>
             <strong>Model:</strong> ${model}<br>
-            <strong>Capabilities:</strong> ${info.capabilities}
+            <strong>Capabilities:</strong> ${capabilities}
         `;
     }    copyTokenToClipboard(tokenText, buttonElement = null) {
         navigator.clipboard.writeText(tokenText).then(() => {
@@ -357,7 +389,8 @@ class LLMJudgeApp {    constructor() {
                 fil_translation: this.filTranslation.value,
                 ref_translation: this.refTranslation.value,
                 llm_model: this.llmPicker.value,
-                llm_provider: this.llmPicker.selectedOptions[0].dataset.provider
+                llm_provider: this.llmPicker.selectedOptions[0].dataset.provider,
+                agentic_mode: this.agenticModeToggle.checked || false
             };
 
             console.log('[DEBUG] Sending judge request:', requestData);
@@ -503,13 +536,42 @@ class LLMJudgeApp {    constructor() {
                 `).join('')}
             </div>
             
+            ${result.thought_summary ? `
+                <div class="thought-summary-section">
+                    <div class="thought-summary-header">
+                        <h3>
+                            <i class="fas fa-brain"></i> 
+                            LLM Thought Process
+                            <span class="agentic-badge">Agentic Mode</span>
+                        </h3>
+                        <button class="toggle-thought-btn" onclick="app.toggleThoughtSummary()">
+                            <i class="fas fa-chevron-down"></i>
+                            <span>Show Details</span>
+                        </button>
+                    </div>
+                    <div class="thought-summary-content" style="display: none;">
+                        <div class="thought-summary-text">
+                            ${result.thought_summary.replace(/\n/g, '<br>')}
+                        </div>
+                    </div>
+                </div>
+            ` : ''}
+            
             <div class="judgment-metadata">
                 <div class="metadata-item">
                     <strong>Model:</strong> ${metadata.model} (${metadata.provider})
+                    ${metadata.agentic_mode ? '<span class="agentic-indicator"><i class="fas fa-robot"></i> Agentic</span>' : ''}
                 </div>
                 <div class="metadata-item">
                     <strong>Prompt Length:</strong> ${metadata.prompt_length} characters
                 </div>
+                ${metadata.agentic_features ? `
+                    <div class="metadata-item">
+                        <strong>Agentic Features:</strong> 
+                        ${metadata.agentic_features.google_search_enabled ? '<i class="fas fa-search"></i> Search' : ''}
+                        ${metadata.agentic_features.thought_summary_captured ? '<i class="fas fa-brain"></i> Thoughts' : ''}
+                    </div>
+                ` : ''}
             </div>
         `;
         
@@ -523,7 +585,28 @@ class LLMJudgeApp {    constructor() {
             .replace(/\\n/g, '\n')
             .replace(/\\r/g, '\r');
         this.showModal(metricName, decodedExplanation);
-    }showError(message) {
+    }
+
+    toggleThoughtSummary() {
+        const content = document.querySelector('.thought-summary-content');
+        const button = document.querySelector('.toggle-thought-btn');
+        const icon = button.querySelector('i');
+        const text = button.querySelector('span');
+        
+        if (content.style.display === 'none') {
+            // Show the thought summary
+            content.style.display = 'block';
+            icon.className = 'fas fa-chevron-up';
+            text.textContent = 'Hide Details';
+        } else {
+            // Hide the thought summary
+            content.style.display = 'none';
+            icon.className = 'fas fa-chevron-down';
+            text.textContent = 'Show Details';
+        }
+    }
+
+    showError(message) {
         // Remove any existing error notifications
         const existingErrors = document.querySelectorAll('.error-notification');
         existingErrors.forEach(error => error.remove());

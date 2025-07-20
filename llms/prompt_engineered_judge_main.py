@@ -4,7 +4,7 @@ import os
 import json
 from typing import Dict, Any, Optional
 from pydantic import BaseModel
-import google.generativeai as genai
+from google import genai
 from openai import OpenAI
 
 
@@ -27,6 +27,9 @@ class TranslationJudgment(BaseModel):
     
     completeness: bool
     completeness_explanation: str
+    
+    # Optional field for agentic mode - captures LLM's reasoning process
+    thought_summary: Optional[str] = None
 
 
 class LLMClient:
@@ -41,11 +44,11 @@ class LLMClient:
 
 
 class GeminiClient(LLMClient):
-    """Google Gemini API client with structured output"""
+    """Google Gemini API client with structured output using new google-genai package"""
     
     def __init__(self, api_key: str, model_name: str = "gemini-2.0-flash-exp"):
         super().__init__(api_key)
-        genai.configure(api_key=api_key)
+        self.client = genai.Client(api_key=api_key)
         self.model_name = model_name
     
     def generate_judgment(self, prompt: str) -> Dict[str, Any]:
@@ -57,17 +60,15 @@ class GeminiClient(LLMClient):
         try:
             print("[DEBUG] Calling Gemini API with structured output...")
             
-            # Configure the model with structured output
-            model = genai.GenerativeModel(
-                model_name=self.model_name,
-                generation_config={
+            # Generate content with structured output using new API
+            response = self.client.models.generate_content(
+                model=self.model_name,
+                contents=prompt,
+                config={
                     "response_mime_type": "application/json",
                     "response_schema": TranslationJudgment,
                 }
             )
-            
-            # Generate content - ONLY the prompt is sent, schema enforces structure
-            response = model.generate_content(prompt)
             
             print(f"[DEBUG] Gemini API response received, length: {len(response.text)}")
             print(f"[DEBUG] Full raw response: {response.text}")
@@ -82,7 +83,7 @@ class GeminiClient(LLMClient):
             
             return {
                 "success": True,
-                "data": judgment.dict(),
+                "data": judgment.model_dump(),
                 "raw_response": response.text
             }
             
@@ -162,7 +163,7 @@ class OpenAIClient(LLMClient):
             
             return {
                 "success": True,
-                "data": judgment.dict(),
+                "data": judgment.model_dump(),
                 "raw_response": response_text
             }
             
@@ -243,6 +244,8 @@ class DemoClient(LLMClient):
         """Generate demo structured translation judgment"""
         import time
         import random
+        
+        print(f"[DEBUG] DemoClient.generate_judgment called with prompt length: {len(prompt)}")
         
         # Simulate API delay
         time.sleep(1)

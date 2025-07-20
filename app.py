@@ -4,6 +4,7 @@ import json
 from datetime import datetime
 from dotenv import load_dotenv
 from llms.prompt_engineered_judge_main import create_llm_client
+from llms.agentic_judge_main import create_agentic_llm_client
 from utils.prompt_utils import replace_tokens, validate_tokens
 from utils.eval_utils import calculate_final_score
 
@@ -71,8 +72,9 @@ def judge_translation():
         ref_translation = data.get('ref_translation', '')
         llm_model = data['llm_model']
         llm_provider = data['llm_provider']
+        agentic_mode = data.get('agentic_mode', False)
         
-        print(f"[DEBUG] Judge request received: provider={llm_provider}, model={llm_model}")
+        print(f"[DEBUG] Judge request received: provider={llm_provider}, model={llm_model}, agentic_mode={agentic_mode}")
         print(f"[DEBUG] Text lengths: source={len(source_text)}, translation={len(fil_translation)}")
         
         # Validate tokens in system prompt
@@ -93,11 +95,16 @@ def judge_translation():
         
         print(f"[DEBUG] Final prompt length: {len(final_prompt)}")
         
-        # Create LLM client
+        # Create LLM client - use agentic client if agentic mode is enabled
         try:
-            print(f"[DEBUG] Creating LLM client for provider: {llm_provider}")
-            llm_client = create_llm_client(llm_provider, llm_model)
-            print(f"[DEBUG] Created client type: {type(llm_client).__name__}")
+            if agentic_mode:
+                print(f"[DEBUG] Creating Agentic LLM client for provider: {llm_provider}")
+                llm_client = create_agentic_llm_client(llm_provider, llm_model)
+                print(f"[DEBUG] Created agentic client type: {type(llm_client).__name__}")
+            else:
+                print(f"[DEBUG] Creating standard LLM client for provider: {llm_provider}")
+                llm_client = create_llm_client(llm_provider, llm_model)
+                print(f"[DEBUG] Created standard client type: {type(llm_client).__name__}")
         except ValueError as e:
             print(f"[DEBUG] Error creating LLM client: {str(e)}")
             return jsonify({
@@ -128,7 +135,7 @@ def judge_translation():
                 'error': 'Failed to save judgment results'
             }), 500
           # Return complete result
-        return jsonify({
+        response_data = {
             'success': True,
             'judgment': judgment_data,
             'final_score': final_score,
@@ -137,9 +144,19 @@ def judge_translation():
                 'model': llm_model,
                 'provider': llm_provider,
                 'prompt_length': len(final_prompt),
-                'saved_file': os.path.basename(save_path) if save_path else None
+                'saved_file': os.path.basename(save_path) if save_path else None,
+                'agentic_mode': agentic_mode
             }
-        })
+        }
+        
+        # Add agentic-specific data if available
+        if agentic_mode and 'thought_summary' in judgment_result:
+            response_data['thought_summary'] = judgment_result['thought_summary']
+        
+        if agentic_mode and 'agentic_features' in judgment_result:
+            response_data['metadata']['agentic_features'] = judgment_result['agentic_features']
+        
+        return jsonify(response_data)
         
     except Exception as e:
         return jsonify({

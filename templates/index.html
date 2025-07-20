@@ -76,13 +76,31 @@
                 <div class="section">
                     <h2>LLM Picker</h2>
                     <select id="llm-picker" class="llm-dropdown">
-                        <option value="gemini-2.5-flash-preview-05-20" data-provider="google">Gemini 2.5 Flash</option>
+                        <option value="gemini-2.5-flash" data-provider="google">Gemini 2.5 Flash</option>
                         <option value="gemini-2.5-pro" data-provider="google">Gemini 2.5 Pro</option>
                         <option value="gemini-1.5-flash" data-provider="google">Gemini 1.5 Flash</option>
                         <option value="gpt-4o" data-provider="openai">GPT-4o</option>
                         <option value="gpt-4o-mini" data-provider="openai">GPT-4o Mini</option>
                         <option value="gpt-4.1-nano" data-provider="openai">GPT-4.1 Nano</option>
                     </select>
+                    
+                    <!-- Agentic Mode Toggle - Only visible for Gemini 2.5 models -->
+                    <div id="agentic-mode-container" class="agentic-mode-container" style="display: none;">
+                        <div class="agentic-toggle">
+                            <label class="toggle-label">
+                                <input type="checkbox" id="agentic-mode-toggle" class="toggle-input">
+                                <span class="toggle-slider"></span>
+                                <span class="toggle-text">Agentic Mode</span>
+                            </label>
+                            <div class="agentic-info">
+                                <small>
+                                    <i class="fas fa-search"></i> Google Search grounding + 
+                                    <i class="fas fa-brain"></i> Thought summaries
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                    
                     <div id="llm-info" class="llm-info">
                         <strong>Provider:</strong> <span class="provider-badge provider-google">Google</span><br>
                         <strong>Model:</strong> gemini-2.0-flash-exp<br>
