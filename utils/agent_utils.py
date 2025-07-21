@@ -82,6 +82,61 @@ def create_agentic_config(
     
     return types.GenerateContentConfig(**config_params)
 
+def create_agentic_unstructured_config(
+    include_google_search: bool = True,
+    include_thoughts: bool = True
+) -> types.GenerateContentConfig:
+    """
+    Create configuration for agentic LLM behavior with tools but no structured output.
+    
+    This configuration enables Google Search grounding and thought summaries
+    while allowing unstructured text output to work around Gemini API limitations
+    where tools and structured output cannot be used simultaneously.
+    
+    Args:
+        include_google_search (bool): Enable Google Search grounding
+        include_thoughts (bool): Enable thought summary capture
+        
+    Returns:
+        types.GenerateContentConfig: Agentic configuration without structured output
+    """
+    tools = []
+    
+    # Add Google Search grounding if enabled
+    if include_google_search:
+        tools.append(create_google_search_tool())
+    
+    config_params = {}
+    
+    # Add tools if any are configured
+    if tools:
+        config_params['tools'] = tools
+    
+    # Add thinking configuration if enabled
+    if include_thoughts:
+        config_params['thinking_config'] = create_thinking_config(include_thoughts)
+    
+    return types.GenerateContentConfig(**config_params)
+
+def create_structuring_config(response_schema: Any) -> types.GenerateContentConfig:
+    """
+    Create configuration for structured output conversion.
+    
+    This configuration is used for the second LLM call that converts
+    unstructured agentic output into the required structured format.
+    Uses no tools to ensure compatibility with structured output.
+    
+    Args:
+        response_schema (Any): Pydantic schema for response validation
+        
+    Returns:
+        types.GenerateContentConfig: Configuration for structured output only
+    """
+    return types.GenerateContentConfig(
+        response_mime_type="application/json",
+        response_schema=response_schema
+    )
+
 def extract_thought_summary(response) -> Dict[str, Any]:
     """
     Extract thought summary and main content from agentic response.
@@ -130,6 +185,9 @@ AGENTIC_SUPPORTED_MODELS = [
     "gemini-2.5-flash",
     "gemini-2.5-flash-preview-05-20"
 ]
+
+# Model for structuring unstructured agentic output - cost-effective for simple task
+STRUCTURING_MODEL = "gemini-2.5-flash"
 
 def is_agentic_model_supported(model_name: str) -> bool:
     """

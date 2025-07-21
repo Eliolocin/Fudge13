@@ -191,7 +191,8 @@ def save_judgment_results(request_data, llm_response, final_score_data, raw_prom
                 "success": llm_response.get("success"),
                 "data": llm_response.get("data"),
                 "raw_response": llm_response.get("raw_response"),
-                "error": llm_response.get("error")
+                "error": llm_response.get("error"),
+                "thought_summary": llm_response.get("thought_summary")
             },
             "final_score": final_score_data,
             "metadata": {
