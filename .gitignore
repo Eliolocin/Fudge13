@@ -188,3 +188,4 @@ results/
 .env
 .claude/
 CLAUDE.md
+evaluation_results/
