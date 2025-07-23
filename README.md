@@ -84,35 +84,28 @@ The project includes an automated evaluation script (`auto_evaluate.py`) for sys
 
 ### Prerequisites for Evaluation
 
-1. **CSV Dataset**: Prepare a CSV file with human-labeled translation pairs
+1. **CSV Dataset**: Prepare a CSV file with human-labeled translations
 2. **Required Columns**:
    - `English`: Source text in English
-   - `Filipino-Correct`: Human-verified good translation
-   - `Filipino-Flawed`: Human-verified bad translation
-3. **Optional Columns** (for Spearman correlation analysis):
-   - `Human-Score-Correct`: Human score 1-5 for correct translations
-   - `Human-Score-Flawed`: Human score 1-5 for flawed translations
+   - `Translation`: Filipino translation to be evaluated
+   - `Final Score`: Human evaluation score (1-5, where ≥3 = good translation)
 4. **API Keys**: Valid Google API key in `.env` file (required for actual LLM evaluation)
 
 ### CSV Format Examples
 
-#### Basic Format (Binary Analysis Only)
+#### 3-Column Format (English, Translation, Final Score)
 ```csv
-English,Filipino-Correct,Filipino-Flawed
-"Hello, how are you?","Kumusta ka?","Kamusta kayo sa lahat?"
-"I love reading books.","Mahilig akong magbasa ng mga libro.","Gusto ko ang pagbabasa mga libro mo."
-"The weather is beautiful today.","Ang panahon ay maganda ngayon.","Ang temperatura ay beautiful ngayong araw."
-```
-
-#### Extended Format (With Human Scores for Correlation Analysis)
-```csv
-English,Filipino-Correct,Filipino-Flawed,Human-Score-Correct,Human-Score-Flawed
-"Hello, how are you?","Kumusta ka?","Kamusta kayo sa lahat?",5,2
-"I love reading books.","Mahilig akong magbasa ng mga libro.","Gusto ko ang pagbabasa mga libro mo.",5,1
-"The weather is beautiful today.","Ang panahon ay maganda ngayon.","Ang temperatura ay beautiful ngayong araw.",4,1
+English,Translation,Final Score
+"Hello, how are you?","Kumusta ka?",5
+"Hello, how are you?","Kamusta kayo sa lahat?",2
+"I love reading books.","Mahilig akong magbasa ng mga libro.",5
+"I love reading books.","Gusto ko ang pagbabasa mga libro mo.",1
+"The weather is beautiful today.","Ang panahon ay maganda ngayon.",4
+"The weather is beautiful today.","Ang temperatura ay beautiful ngayong araw.",1
 ```
 
 **Human Score Scale**: 1 = Poor, 2 = Fair, 3 = Good, 4 = Very Good, 5 = Excellent
+**Classification Threshold**: Final Score ≥ 3 is considered "good translation", < 3 is "bad translation"
 
 See `example_evaluation_data.csv` for a complete example.
 
@@ -121,7 +114,7 @@ See `example_evaluation_data.csv` for a complete example.
 #### Basic Usage
 
 ```bash
-# Evaluate all translations in the dataset (both correct and flawed)
+# Evaluate all translations in the 3-column dataset
 python auto_evaluate.py --csv_file your_dataset.csv
 
 # Use the provided example dataset
@@ -134,12 +127,6 @@ python auto_evaluate.py --csv_file example_evaluation_data.csv
 # Evaluate specific row range (useful for large datasets)
 python auto_evaluate.py --csv_file data.csv --row_start 1 --row_end 100
 
-# Evaluate only correct translations
-python auto_evaluate.py --csv_file data.csv --translation_type correct
-
-# Evaluate only flawed translations  
-python auto_evaluate.py --csv_file data.csv --translation_type flawed
-
 # Use agentic judge mode (with Google Search grounding)
 python auto_evaluate.py --csv_file data.csv --use_agentic
 
@@ -149,7 +136,7 @@ python auto_evaluate.py --csv_file data.csv --llm_model gemini-2.5-pro
 # Custom output directory
 python auto_evaluate.py --csv_file data.csv --output_dir my_results/
 
-# Evaluate with reruns for consistency analysis (each condition run 3 times total)
+# Evaluate with reruns for consistency analysis (each translation run 3 times total)
 python auto_evaluate.py --csv_file data.csv --reruns 2
 ```
 
@@ -159,7 +146,6 @@ python auto_evaluate.py --csv_file data.csv --reruns 2
 # Comprehensive evaluation with agentic judge on specific range
 python auto_evaluate.py --csv_file dataset.csv \
                        --row_start 1 --row_end 50 \
-                       --translation_type default \
                        --use_agentic \
                        --llm_model gemini-2.5-flash \
                        --output_dir evaluation_results/
@@ -305,8 +291,8 @@ The script includes robust error handling:
 ### Troubleshooting
 
 - **"No valid Google API key"**: Ensure `GOOGLE_API_KEY` is set in your `.env` file
-- **"CSV missing required columns"**: Verify your CSV has `English`, `Filipino-Correct`, `Filipino-Flawed` columns
-- **"Invalid human scores"**: Human scores must be integers 1-5 if present
+- **"CSV missing required columns"**: Verify your CSV has `English`, `Translation`, `Final Score` columns
+- **"Invalid scores in 'Final Score' column"**: Final Score values must be integers 1-5
 - **Rate limiting errors**: Wait for quota reset or reduce evaluation frequency
 - **Memory issues with large CSVs**: Process in smaller chunks using `--row_start` and `--row_end`
 
@@ -317,7 +303,7 @@ The project includes a comprehensive analysis script (`analysis.py`) for evaluat
 ### Prerequisites for Analysis
 
 1. **Evaluation Data**: Complete evaluation results generated by `auto_evaluate.py`
-2. **Human Scores** (Optional): For correlation analysis, include `Human-Score-Correct` and `Human-Score-Flawed` columns in your CSV
+2. **Human Scores**: For correlation analysis, Final Score column is automatically used from 3-column CSV format
 3. **Rerun Data** (Optional): For consistency analysis, generate reruns using `--reruns` parameter in evaluation
 4. **Python Dependencies**: `scipy` (optional but recommended for more accurate statistical calculations)
 
@@ -378,7 +364,7 @@ Measures how well LLM scores (1-5) correlate with human scores (1-5):
 - **Statistical Significance**: p-value < 0.05 indicates significant correlation
 - **Sample Size**: Minimum 3 paired scores required for analysis
 
-**Requirements**: CSV must include `Human-Score-Correct` and `Human-Score-Flawed` columns with values 1-5.
+**Requirements**: CSV must include `Final Score` column with values 1-5.
 
 #### 3. Score Variation Analysis
 
@@ -485,7 +471,7 @@ python analysis.py --filter-model production-model --output-dir consistency_moni
 
 **Common Issues:**
 
-- **"Insufficient data for correlation analysis"**: Add `Human-Score-Correct` and `Human-Score-Flawed` columns to CSV data
+- **"Insufficient data for correlation analysis"**: Ensure your CSV includes Final Score column with human ratings 1-5
 - **"No rerun data found for variation analysis"**: Generate reruns using `--reruns` parameter in evaluation
 - **"No evaluation data found"**: Run `auto_evaluate.py` first to generate evaluation results
 - **Low accuracy unexpected**: Check if evaluation logic matches human labeling criteria

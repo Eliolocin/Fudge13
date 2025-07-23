@@ -3,13 +3,13 @@
 Automated LLM Judge Evaluation Script
 
 This script systematically evaluates LLM judge performance against human-labeled 
-translation pairs from a CSV dataset. It supports both agentic and non-agentic 
-judge modes with comprehensive error handling and result analysis.
+translations from a 3-column CSV dataset (English, Translation, Final Score). 
+It supports both agentic and non-agentic judge modes with comprehensive error 
+handling and result analysis.
 
 Usage:
     python auto_evaluate.py --csv_file data.csv --row_start 1 --row_end 100 
-                           --translation_type default --use_agentic false 
-                           --llm_model gemini-2.5-flash
+                           --use_agentic --llm_model gemini-2.5-flash
 """
 
 import argparse
@@ -100,15 +100,8 @@ class AutoEvaluator:
         # Timestamp
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         
-        # Additional parameters that affect evaluation uniqueness
-        translation_type = self.config.get('translation_type', 'default')
-        
-        # Build session ID components
+        # Build session ID components (translation_type removed in 3-column format)
         components = [csv_name, model_clean, mode]
-        
-        # Add translation type if not default
-        if translation_type != 'default':
-            components.append(translation_type)
         
         # Add row range if specified
         row_start = self.config.get('row_start')
@@ -131,7 +124,7 @@ class AutoEvaluator:
         
         return session_parts
     
-    def _generate_base_eval_id(self, row_num: int, translation_type: str) -> str:
+    def _generate_base_eval_id(self, row_num: int) -> str:
         """
         Generate parameter-aware base evaluation ID for grouping runs.
         
@@ -140,7 +133,6 @@ class AutoEvaluator:
         
         Args:
             row_num (int): CSV row number
-            translation_type (str): 'correct' or 'flawed'
             
         Returns:
             str: Enhanced base evaluation ID that includes key parameters
@@ -150,8 +142,8 @@ class AutoEvaluator:
         model_clean = self.config.get('llm_model', 'gemini-2.5-flash').replace('.', '-').replace('_', '-')
         mode = 'agentic' if self.config.get('use_agentic', False) else 'prompt'
         
-        # Build base evaluation ID
-        base_id = f"{csv_name}_row{row_num}_{translation_type}_{model_clean}_{mode}"
+        # Build base evaluation ID (translation_type removed in 3-column format)
+        base_id = f"{csv_name}_row{row_num}_{model_clean}_{mode}"
         
         return base_id
     
@@ -198,11 +190,7 @@ class AutoEvaluator:
         if not csv_path.exists():
             raise FileNotFoundError(f"CSV file not found: {csv_path}")
         
-        # Validate translation_type
-        valid_types = ['default', 'correct', 'flawed']
-        translation_type = self.config.get('translation_type', 'default')
-        if translation_type not in valid_types:
-            raise ValueError(f"Invalid translation_type: {translation_type}. Must be one of: {valid_types}")
+        # Translation type validation removed - 3-column format processes single translations only
         
         # Validate model name format
         llm_model = self.config.get('llm_model', 'gemini-2.5-flash')
@@ -264,26 +252,22 @@ class AutoEvaluator:
             df = pd.read_csv(self.config['csv_file'])
             self.logger.info(f"CSV loaded with {len(df)} rows")
             
-            # Validate required columns
-            required_columns = ['English', 'Filipino-Correct', 'Filipino-Flawed']
+            # Validate required columns for 3-column format
+            required_columns = ['English', 'Translation', 'Final Score']
             missing_columns = [col for col in required_columns if col not in df.columns]
             
             if missing_columns:
                 raise ValueError(f"CSV missing required columns: {missing_columns}")
             
-            # Check for optional human score columns
-            human_score_columns = ['Human-Score-Correct', 'Human-Score-Flawed']
-            has_human_scores = all(col in df.columns for col in human_score_columns)
+            # Validate Final Score column values (1-5 integers)
+            final_score_col = 'Final Score'
+            invalid_scores = df[~df[final_score_col].between(1, 5) | ~df[final_score_col].apply(lambda x: isinstance(x, (int, float)) and x == int(x))]
+            if not invalid_scores.empty:
+                raise ValueError(f"Invalid scores in 'Final Score' column: must be integers 1-5")
             
-            if has_human_scores:
-                self.logger.info("Human score columns detected - Spearman correlation analysis will be available")
-                # Validate human scores are integers between 1-5
-                for col in human_score_columns:
-                    invalid_scores = df[~df[col].between(1, 5) | ~df[col].apply(lambda x: isinstance(x, (int, float)) and x == int(x))]
-                    if not invalid_scores.empty:
-                        raise ValueError(f"Invalid human scores in column '{col}': must be integers 1-5")
-            else:
-                self.logger.info("No human score columns detected - analysis will use binary pass/fail only")
+            # Human scores are always available in the new format
+            has_human_scores = True
+            self.logger.info("Final Score column detected - Spearman correlation analysis will be available")
             
             self.has_human_scores = has_human_scores
             
@@ -314,18 +298,17 @@ class AutoEvaluator:
     
     def evaluate_translation_pair(self, source_text: str, fil_translation: str, 
                                 expected_good: bool, row_num: int, 
-                                translation_type: str, run_id: int = 0, 
+                                run_id: int = 0, 
                                 run_total: int = 1, base_eval_id: str = None, 
                                 unique_eval_id: str = None, human_score: int = None) -> Dict[str, Any]:
         """
-        Evaluate a single English-to-Filipino translation pair.
+        Evaluate a single English-to-Filipino translation.
         
         Args:
             source_text (str): English source text
             fil_translation (str): Filipino translation to evaluate
             expected_good (bool): Whether translation is expected to be good
             row_num (int): Original CSV row number  
-            translation_type (str): Type of translation ('correct' or 'flawed')
             run_id (int): Run number (0=original, 1+=reruns)
             run_total (int): Total number of runs planned for this condition
             base_eval_id (str): Base identifier grouping all runs of same condition
@@ -336,7 +319,7 @@ class AutoEvaluator:
             Dict[str, Any]: Complete evaluation result with pass/fail analysis and run tracking
         """
         run_info = f"run {run_id + 1}/{run_total}" if run_total > 1 else ""
-        self.logger.info(f"Evaluating row {row_num} - {translation_type} translation {run_info}".strip())
+        self.logger.info(f"Evaluating row {row_num} translation {run_info}".strip())
         
         # Prepare prompt with token replacement
         filled_prompt = replace_tokens(
@@ -385,7 +368,6 @@ class AutoEvaluator:
                     "final_score": final_score,
                     "evaluation_metadata": {
                         "csv_row": row_num,
-                        "translation_type": translation_type,
                         "expected_good_translation": expected_good,
                         "llm_pass": llm_pass,
                         "use_agentic": self.config.get('use_agentic', False),
@@ -398,7 +380,6 @@ class AutoEvaluator:
                         "evaluation_parameters": {
                             "row_start": self.config.get('row_start', 1),
                             "row_end": self.config.get('row_end'),
-                            "translation_type": self.config.get('translation_type', 'default'),
                             "llm_model": self.config.get('llm_model', 'gemini-2.5-flash'),
                             "use_agentic": self.config.get('use_agentic', False),
                             "reruns": self.config.get('reruns', 0)
@@ -406,13 +387,13 @@ class AutoEvaluator:
                     },
                     "metadata": {
                         "app_version": "1.0",
-                        "filename": f"auto_eval_{self.timestamp}_{row_num}_{translation_type}_run{run_id}.json",
+                        "filename": f"auto_eval_{self.timestamp}_{row_num}_run{run_id}.json",
                         "saved_at": datetime.now().isoformat()
                     }
                 }
                 
                 run_info = f" run {run_id + 1}/{run_total}" if run_total > 1 else ""
-                self.logger.info(f"Row {row_num} ({translation_type}{run_info}): Score={llm_score}, Pass={llm_pass}")
+                self.logger.info(f"Row {row_num}{run_info}: Score={llm_score}, Pass={llm_pass}")
                 return result
                 
             except Exception as e:
@@ -457,45 +438,27 @@ class AutoEvaluator:
             # Load CSV data
             df = self.load_csv_data()
             
-            # Determine which translations to evaluate
-            translation_type = self.config.get('translation_type', 'default')
-            
+            # Create evaluation plan for 3-column format (one translation per row)
             evaluation_plan = []
             for idx, row in df.iterrows():
                 row_num = row['original_row_index']
                 source_text = str(row['English'])
+                fil_translation = str(row['Translation'])
+                final_score = int(row['Final Score'])
                 
-                if translation_type in ['default', 'correct']:
-                    # Add correct translation evaluation
-                    eval_item = {
-                        'row_num': row_num,
-                        'source_text': source_text,
-                        'fil_translation': str(row['Filipino-Correct']),
-                        'expected_good': True,
-                        'translation_type': 'correct'
-                    }
-                    
-                    # Add human score if available
-                    if self.has_human_scores:
-                        eval_item['human_score'] = int(row['Human-Score-Correct'])
-                    
-                    evaluation_plan.append(eval_item)
+                # Determine if translation is expected to be good based on threshold
+                # Score >= 3 means "good translation" (3, 4, 5 are considered good)
+                expected_good = final_score >= 3
                 
-                if translation_type in ['default', 'flawed']:
-                    # Add flawed translation evaluation  
-                    eval_item = {
-                        'row_num': row_num,
-                        'source_text': source_text,
-                        'fil_translation': str(row['Filipino-Flawed']),
-                        'expected_good': False,
-                        'translation_type': 'flawed'
-                    }
-                    
-                    # Add human score if available
-                    if self.has_human_scores:
-                        eval_item['human_score'] = int(row['Human-Score-Flawed'])
-                    
-                    evaluation_plan.append(eval_item)
+                eval_item = {
+                    'row_num': row_num,
+                    'source_text': source_text,
+                    'fil_translation': fil_translation,
+                    'expected_good': expected_good,
+                    'human_score': final_score
+                }
+                
+                evaluation_plan.append(eval_item)
             
             # Calculate total evaluations including reruns
             reruns = self.config.get('reruns', 0)
@@ -508,9 +471,9 @@ class AutoEvaluator:
             eval_counter = 0
             for condition_idx, eval_item in enumerate(evaluation_plan, 1):
                 # Generate parameter-aware base evaluation ID for grouping runs
-                base_eval_id = self._generate_base_eval_id(eval_item['row_num'], eval_item['translation_type'])
+                base_eval_id = self._generate_base_eval_id(eval_item['row_num'])
                 
-                self.logger.info(f"Processing condition {condition_idx}/{len(evaluation_plan)}: Row {eval_item['row_num']} ({eval_item['translation_type']}) - {total_runs_per_eval} runs")
+                self.logger.info(f"Processing condition {condition_idx}/{len(evaluation_plan)}: Row {eval_item['row_num']} - {total_runs_per_eval} runs")
                 
                 # Execute original + reruns for this condition
                 for run_id in range(total_runs_per_eval):
@@ -519,7 +482,7 @@ class AutoEvaluator:
                     
                     try:
                         run_info = f"run {run_id + 1}/{total_runs_per_eval}" if total_runs_per_eval > 1 else ""
-                        self.logger.info(f"Progress: {eval_counter}/{total_evaluations} - Row {eval_item['row_num']} ({eval_item['translation_type']}) {run_info}".strip())
+                        self.logger.info(f"Progress: {eval_counter}/{total_evaluations} - Row {eval_item['row_num']} {run_info}".strip())
                         
                         # Execute evaluation with run tracking parameters
                         result = self.evaluate_translation_pair(
@@ -537,7 +500,7 @@ class AutoEvaluator:
                         
                     except Exception as e:
                         run_info = f" run {run_id + 1}/{total_runs_per_eval}" if total_runs_per_eval > 1 else ""
-                        self.logger.error(f"Failed to evaluate row {eval_item['row_num']} ({eval_item['translation_type']}{run_info}): {e}")
+                        self.logger.error(f"Failed to evaluate row {eval_item['row_num']}{run_info}: {e}")
                         # Save current progress before potentially exiting
                         self.save_incremental_results()
                         
@@ -568,11 +531,11 @@ class AutoEvaluator:
             return
         
         total_evaluations = len(self.results)
-        correct_evaluations = [r for r in self.results if r['evaluation_metadata']['translation_type'] == 'correct']
-        flawed_evaluations = [r for r in self.results if r['evaluation_metadata']['translation_type'] == 'flawed']
+        good_evaluations = [r for r in self.results if r['evaluation_metadata']['expected_good_translation']]
+        bad_evaluations = [r for r in self.results if not r['evaluation_metadata']['expected_good_translation']]
         
-        correct_passes = sum(1 for r in correct_evaluations if r['evaluation_metadata']['llm_pass'])
-        flawed_passes = sum(1 for r in flawed_evaluations if r['evaluation_metadata']['llm_pass'])
+        good_passes = sum(1 for r in good_evaluations if r['evaluation_metadata']['llm_pass'])
+        bad_passes = sum(1 for r in bad_evaluations if r['evaluation_metadata']['llm_pass'])
         
         # Calculate rerun statistics if applicable
         reruns = self.config.get('reruns', 0)
@@ -615,17 +578,17 @@ class AutoEvaluator:
                 "total_evaluations": total_evaluations,
                 "unique_conditions": len(unique_conditions) if unique_conditions else total_evaluations,
                 "runs_per_condition": reruns + 1,
-                "correct_translations": {
-                    "count": len(correct_evaluations),
-                    "passes": correct_passes,
-                    "pass_rate": correct_passes / len(correct_evaluations) if correct_evaluations else 0
+                "good_translations": {
+                    "count": len(good_evaluations),
+                    "passes": good_passes,
+                    "pass_rate": good_passes / len(good_evaluations) if good_evaluations else 0
                 },
-                "flawed_translations": {
-                    "count": len(flawed_evaluations),
-                    "passes": flawed_passes,  
-                    "pass_rate": flawed_passes / len(flawed_evaluations) if flawed_evaluations else 0
+                "bad_translations": {
+                    "count": len(bad_evaluations),
+                    "passes": bad_passes,  
+                    "pass_rate": bad_passes / len(bad_evaluations) if bad_evaluations else 0
                 },
-                "overall_accuracy": (correct_passes + flawed_passes) / total_evaluations if total_evaluations > 0 else 0,
+                "overall_accuracy": (good_passes + bad_passes) / total_evaluations if total_evaluations > 0 else 0,
                 "duration_minutes": (datetime.now() - self.start_time).total_seconds() / 60,
                 "config_used": self.config
             }
@@ -653,16 +616,16 @@ def parse_arguments():
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
-  # Evaluate rows 1-100 using default mode (both correct and flawed translations)
+  # Evaluate rows 1-100 from 3-column CSV (English, Translation, Final Score)
   python auto_evaluate.py --csv_file data.csv --row_start 1 --row_end 100
   
-  # Evaluate only correct translations using agentic mode
-  python auto_evaluate.py --csv_file data.csv --translation_type correct --use_agentic
+  # Evaluate using agentic mode
+  python auto_evaluate.py --csv_file data.csv --use_agentic
   
   # Use specific model with custom output directory
   python auto_evaluate.py --csv_file data.csv --llm_model gemini-2.5-pro --output_dir results/
   
-  # Evaluate with reruns for consistency analysis (each condition run 3 times total)
+  # Evaluate with reruns for consistency analysis (each translation run 3 times total)
   python auto_evaluate.py --csv_file data.csv --reruns 2
   
   # Combine reruns with other options
@@ -671,13 +634,11 @@ Examples:
     )
     
     parser.add_argument('--csv_file', required=True, type=str,
-                       help='Path to CSV file with English, Filipino-Correct, Filipino-Flawed columns')
+                       help='Path to CSV file with English, Translation, Final Score columns')
     parser.add_argument('--row_start', type=int, default=1,
                        help='Starting row number (1-based, default: 1)')
     parser.add_argument('--row_end', type=int, default=None,
                        help='Ending row number (1-based, default: last row)')
-    parser.add_argument('--translation_type', choices=['default', 'correct', 'flawed'], default='default',
-                       help='Which translations to evaluate (default: both correct and flawed)')
     parser.add_argument('--use_agentic', action='store_true',
                        help='Use agentic judge instead of prompt-engineered judge')
     parser.add_argument('--llm_model', type=str, default='gemini-2.5-flash',
@@ -701,7 +662,6 @@ def main():
             'csv_file': args.csv_file,
             'row_start': args.row_start,
             'row_end': args.row_end,
-            'translation_type': args.translation_type,
             'use_agentic': args.use_agentic,
             'llm_model': args.llm_model,
             'output_dir': args.output_dir,
