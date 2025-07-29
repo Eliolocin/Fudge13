@@ -188,5 +188,3 @@ results/
 .env
 .claude/
 CLAUDE.md
-evaluation_results/
-analysis_results/

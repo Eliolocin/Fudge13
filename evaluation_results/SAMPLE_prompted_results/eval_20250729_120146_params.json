@@ -1,0 +1,560 @@
+[
+  {
+    "timestamp": "2025-07-29T12:01:58.969899",
+    "request_data": {
+      "source_text": "The children laughed and played under the afternoon sun.",
+      "fil_translation": "Ang mga bata ay nagtawanan at naglaro sa ilalim ng hapon na araw.",
+      "ref_translation": "",
+      "system_prompt": "You are an expert translation judge evaluating English-to-Filipino translations. Please assess the following translation based on these criteria:\n\n**Source Text (English):**\n{{source_text}}\n\n**Translation to Judge (Filipino):**\n{{fil_translation}}\n\nPlease evaluate the translation on the following six criteria and provide a boolean rating (True/False) for each, along with a detailed explanation:\n\n1. **Accuracy**: Is the translation semantically accurate and faithful to the source text?\n2. **Fluency**: Does the translation read naturally and fluently in Filipino?\n3. **Coherence**: Is the translation logically coherent and well-structured?\n4. **Cultural Appropriateness**: Is the translation appropriate to Philippine culture and context?\n5. **Guideline Adherence**: Does the translation follow proper Filipino translation guidelines?\n6. **Completeness**: Is the translation complete without omissions or unnecessary additions?\n\nFor each criterion, provide:\n- A boolean rating (True for meets criteria, False for does not meet criteria)\n- A detailed explanation (2-3 sentences) justifying your rating\n\nBe thorough, objective, and specific in your evaluations.\n",
+      "raw_prompt": "You are an expert translation judge evaluating English-to-Filipino translations. Please assess the following translation based on these criteria:\n\n**Source Text (English):**\nThe children laughed and played under the afternoon sun.\n\n**Translation to Judge (Filipino):**\nAng mga bata ay nagtawanan at naglaro sa ilalim ng hapon na araw.\n\nPlease evaluate the translation on the following six criteria and provide a boolean rating (True/False) for each, along with a detailed explanation:\n\n1. **Accuracy**: Is the translation semantically accurate and faithful to the source text?\n2. **Fluency**: Does the translation read naturally and fluently in Filipino?\n3. **Coherence**: Is the translation logically coherent and well-structured?\n4. **Cultural Appropriateness**: Is the translation appropriate to Philippine culture and context?\n5. **Guideline Adherence**: Does the translation follow proper Filipino translation guidelines?\n6. **Completeness**: Is the translation complete without omissions or unnecessary additions?\n\nFor each criterion, provide:\n- A boolean rating (True for meets criteria, False for does not meet criteria)\n- A detailed explanation (2-3 sentences) justifying your rating\n\nBe thorough, objective, and specific in your evaluations.\n",
+      "llm_provider": "google",
+      "llm_model": "gemini-2.5-flash"
+    },
+    "llm_response": {
+      "success": true,
+      "data": {
+        "accuracy": false,
+        "accuracy_explanation": "The translation is largely accurate, but the phrase \"hapon na araw\" for \"afternoon sun\" is not the most natural or grammatically precise rendering in Filipino. A more accurate phrasing would be \"araw sa hapon\" or \"sikat ng araw sa hapon\" to faithfully convey the nuance of the original.",
+        "fluency": false,
+        "fluency_explanation": "The sentence does not read naturally due to the awkward phrasing \"sa ilalim ng hapon na araw.\" While understandable, this construction for \"under the afternoon sun\" feels forced and unnatural to a native Filipino speaker, hindering the overall flow.",
+        "coherence": true,
+        "coherence_explanation": "The translation maintains logical coherence, as the meaning is still clear despite the awkward phrasing of \"afternoon sun.\" The parts of the sentence flow logically from one to another, presenting a clear picture.",
+        "cultural_appropriateness": true,
+        "cultural_appropriateness_explanation": "The scenario of children playing under the afternoon sun is culturally appropriate and common in the Philippines. There are no cultural nuances or expressions that are misrepresented or could cause offense.",
+        "guideline_adherence": false,
+        "guideline_adherence_explanation": "The translation fails to adhere to proper Filipino translation guidelines, which emphasize naturalness and idiomatic expression. The overly literal translation of \"afternoon sun\" as \"hapon na araw\" demonstrates a lack of adherence to producing idiomatic Filipino.",
+        "completeness": true,
+        "completeness_explanation": "The translation is complete, with all elements from the source text present in the target language. There are no omissions or unnecessary additions that alter the original meaning or intent.",
+        "thought_summary": null
+      },
+      "raw_response": "{\n  \"accuracy\": false,\n  \"accuracy_explanation\": \"The translation is largely accurate, but the phrase \\\"hapon na araw\\\" for \\\"afternoon sun\\\" is not the most natural or grammatically precise rendering in Filipino. A more accurate phrasing would be \\\"araw sa hapon\\\" or \\\"sikat ng araw sa hapon\\\" to faithfully convey the nuance of the original.\",\n  \"fluency\": false,\n  \"fluency_explanation\": \"The sentence does not read naturally due to the awkward phrasing \\\"sa ilalim ng hapon na araw.\\\" While understandable, this construction for \\\"under the afternoon sun\\\" feels forced and unnatural to a native Filipino speaker, hindering the overall flow.\",\n  \"coherence\": true,\n  \"coherence_explanation\": \"The translation maintains logical coherence, as the meaning is still clear despite the awkward phrasing of \\\"afternoon sun.\\\" The parts of the sentence flow logically from one to another, presenting a clear picture.\",\n  \"cultural_appropriateness\": true,\n  \"cultural_appropriateness_explanation\": \"The scenario of children playing under the afternoon sun is culturally appropriate and common in the Philippines. There are no cultural nuances or expressions that are misrepresented or could cause offense.\",\n  \"guideline_adherence\": false,\n  \"guideline_adherence_explanation\": \"The translation fails to adhere to proper Filipino translation guidelines, which emphasize naturalness and idiomatic expression. The overly literal translation of \\\"afternoon sun\\\" as \\\"hapon na araw\\\" demonstrates a lack of adherence to producing idiomatic Filipino.\",\n  \"completeness\": true,\n  \"completeness_explanation\": \"The translation is complete, with all elements from the source text present in the target language. There are no omissions or unnecessary additions that alter the original meaning or intent.\",\n  \"thought_summary\": null\n}"
+    },
+    "final_score": {
+      "score": 3,
+      "label": "Good",
+      "color": "warning",
+      "true_count": 3,
+      "total_criteria": 6
+    },
+    "evaluation_metadata": {
+      "csv_row": 1,
+      "expected_good_translation": true,
+      "llm_pass": true,
+      "use_agentic": false,
+      "run_id": 0,
+      "run_total": 3,
+      "base_eval_id": "validation_set_row1_gemini-2-5-flash_prompt",
+      "unique_eval_id": "validation_set_row1_gemini-2-5-flash_prompt_run0",
+      "human_score": 4,
+      "has_human_scores": true,
+      "evaluation_parameters": {
+        "row_start": 1,
+        "row_end": 3,
+        "llm_model": "gemini-2.5-flash",
+        "use_agentic": false,
+        "reruns": 2
+      }
+    },
+    "metadata": {
+      "app_version": "1.0",
+      "filename": "auto_eval_20250729_120146_1_run0.json",
+      "saved_at": "2025-07-29T12:01:58.969899"
+    }
+  },
+  {
+    "timestamp": "2025-07-29T12:02:04.537147",
+    "request_data": {
+      "source_text": "The children laughed and played under the afternoon sun.",
+      "fil_translation": "Ang mga bata ay nagtawanan at naglaro sa ilalim ng hapon na araw.",
+      "ref_translation": "",
+      "system_prompt": "You are an expert translation judge evaluating English-to-Filipino translations. Please assess the following translation based on these criteria:\n\n**Source Text (English):**\n{{source_text}}\n\n**Translation to Judge (Filipino):**\n{{fil_translation}}\n\nPlease evaluate the translation on the following six criteria and provide a boolean rating (True/False) for each, along with a detailed explanation:\n\n1. **Accuracy**: Is the translation semantically accurate and faithful to the source text?\n2. **Fluency**: Does the translation read naturally and fluently in Filipino?\n3. **Coherence**: Is the translation logically coherent and well-structured?\n4. **Cultural Appropriateness**: Is the translation appropriate to Philippine culture and context?\n5. **Guideline Adherence**: Does the translation follow proper Filipino translation guidelines?\n6. **Completeness**: Is the translation complete without omissions or unnecessary additions?\n\nFor each criterion, provide:\n- A boolean rating (True for meets criteria, False for does not meet criteria)\n- A detailed explanation (2-3 sentences) justifying your rating\n\nBe thorough, objective, and specific in your evaluations.\n",
+      "raw_prompt": "You are an expert translation judge evaluating English-to-Filipino translations. Please assess the following translation based on these criteria:\n\n**Source Text (English):**\nThe children laughed and played under the afternoon sun.\n\n**Translation to Judge (Filipino):**\nAng mga bata ay nagtawanan at naglaro sa ilalim ng hapon na araw.\n\nPlease evaluate the translation on the following six criteria and provide a boolean rating (True/False) for each, along with a detailed explanation:\n\n1. **Accuracy**: Is the translation semantically accurate and faithful to the source text?\n2. **Fluency**: Does the translation read naturally and fluently in Filipino?\n3. **Coherence**: Is the translation logically coherent and well-structured?\n4. **Cultural Appropriateness**: Is the translation appropriate to Philippine culture and context?\n5. **Guideline Adherence**: Does the translation follow proper Filipino translation guidelines?\n6. **Completeness**: Is the translation complete without omissions or unnecessary additions?\n\nFor each criterion, provide:\n- A boolean rating (True for meets criteria, False for does not meet criteria)\n- A detailed explanation (2-3 sentences) justifying your rating\n\nBe thorough, objective, and specific in your evaluations.\n",
+      "llm_provider": "google",
+      "llm_model": "gemini-2.5-flash"
+    },
+    "llm_response": {
+      "success": true,
+      "data": {
+        "accuracy": false,
+        "accuracy_explanation": "The translation is mostly accurate, but the phrase \"hapon na araw\" is a literal and incorrect translation for \"afternoon sun.\" A more accurate phrasing would be \"araw sa hapon\" or \"sikat ng araw sa hapon.\"",
+        "fluency": false,
+        "fluency_explanation": "The phrase \"sa ilalim ng hapon na araw\" sounds unnatural and awkward in Filipino. A native speaker would not typically phrase \"afternoon sun\" this way, which significantly impacts the overall fluency of the sentence.",
+        "coherence": false,
+        "coherence_explanation": "While the overall sentence structure is clear, the specific phrasing \"hapon na araw\" introduces a jarring element that disrupts the natural flow and logical coherence. It leads to a slightly nonsensical reading of \"afternoon day\" rather than \"afternoon sun.\"",
+        "cultural_appropriateness": true,
+        "cultural_appropriateness_explanation": "The concept of children playing under the afternoon sun is universally understood and culturally appropriate in the Philippine context. There are no specific cultural nuances or sensitivities that have been overlooked or misrepresented.",
+        "guideline_adherence": false,
+        "guideline_adherence_explanation": "The translation fails to adhere to the guideline of naturalness and idiomatic expression in Filipino, particularly with \"hapon na araw.\" It opts for a word-for-word literal translation instead of a more natural equivalent for \"afternoon sun.\"",
+        "completeness": true,
+        "completeness_explanation": "All elements of the source text are present in the translation, and no information has been omitted. There are also no unnecessary additions to the translated text.",
+        "thought_summary": null
+      },
+      "raw_response": "{\n  \"accuracy\": false,\n  \"accuracy_explanation\": \"The translation is mostly accurate, but the phrase \\\"hapon na araw\\\" is a literal and incorrect translation for \\\"afternoon sun.\\\" A more accurate phrasing would be \\\"araw sa hapon\\\" or \\\"sikat ng araw sa hapon.\\\"\",\n  \"fluency\": false,\n  \"fluency_explanation\": \"The phrase \\\"sa ilalim ng hapon na araw\\\" sounds unnatural and awkward in Filipino. A native speaker would not typically phrase \\\"afternoon sun\\\" this way, which significantly impacts the overall fluency of the sentence.\",\n  \"coherence\": false,\n  \"coherence_explanation\": \"While the overall sentence structure is clear, the specific phrasing \\\"hapon na araw\\\" introduces a jarring element that disrupts the natural flow and logical coherence. It leads to a slightly nonsensical reading of \\\"afternoon day\\\" rather than \\\"afternoon sun.\\\"\",\n  \"cultural_appropriateness\": true,\n  \"cultural_appropriateness_explanation\": \"The concept of children playing under the afternoon sun is universally understood and culturally appropriate in the Philippine context. There are no specific cultural nuances or sensitivities that have been overlooked or misrepresented.\",\n  \"guideline_adherence\": false,\n  \"guideline_adherence_explanation\": \"The translation fails to adhere to the guideline of naturalness and idiomatic expression in Filipino, particularly with \\\"hapon na araw.\\\" It opts for a word-for-word literal translation instead of a more natural equivalent for \\\"afternoon sun.\\\"\",\n  \"completeness\": true,\n  \"completeness_explanation\": \"All elements of the source text are present in the translation, and no information has been omitted. There are also no unnecessary additions to the translated text.\",\n  \"thought_summary\": null\n}"
+    },
+    "final_score": {
+      "score": 2,
+      "label": "Poor",
+      "color": "error",
+      "true_count": 2,
+      "total_criteria": 6
+    },
+    "evaluation_metadata": {
+      "csv_row": 1,
+      "expected_good_translation": true,
+      "llm_pass": false,
+      "use_agentic": false,
+      "run_id": 1,
+      "run_total": 3,
+      "base_eval_id": "validation_set_row1_gemini-2-5-flash_prompt",
+      "unique_eval_id": "validation_set_row1_gemini-2-5-flash_prompt_run1",
+      "human_score": 4,
+      "has_human_scores": true,
+      "evaluation_parameters": {
+        "row_start": 1,
+        "row_end": 3,
+        "llm_model": "gemini-2.5-flash",
+        "use_agentic": false,
+        "reruns": 2
+      }
+    },
+    "metadata": {
+      "app_version": "1.0",
+      "filename": "auto_eval_20250729_120146_1_run1.json",
+      "saved_at": "2025-07-29T12:02:04.537147"
+    }
+  },
+  {
+    "timestamp": "2025-07-29T12:02:10.864703",
+    "request_data": {
+      "source_text": "The children laughed and played under the afternoon sun.",
+      "fil_translation": "Ang mga bata ay nagtawanan at naglaro sa ilalim ng hapon na araw.",
+      "ref_translation": "",
+      "system_prompt": "You are an expert translation judge evaluating English-to-Filipino translations. Please assess the following translation based on these criteria:\n\n**Source Text (English):**\n{{source_text}}\n\n**Translation to Judge (Filipino):**\n{{fil_translation}}\n\nPlease evaluate the translation on the following six criteria and provide a boolean rating (True/False) for each, along with a detailed explanation:\n\n1. **Accuracy**: Is the translation semantically accurate and faithful to the source text?\n2. **Fluency**: Does the translation read naturally and fluently in Filipino?\n3. **Coherence**: Is the translation logically coherent and well-structured?\n4. **Cultural Appropriateness**: Is the translation appropriate to Philippine culture and context?\n5. **Guideline Adherence**: Does the translation follow proper Filipino translation guidelines?\n6. **Completeness**: Is the translation complete without omissions or unnecessary additions?\n\nFor each criterion, provide:\n- A boolean rating (True for meets criteria, False for does not meet criteria)\n- A detailed explanation (2-3 sentences) justifying your rating\n\nBe thorough, objective, and specific in your evaluations.\n",
+      "raw_prompt": "You are an expert translation judge evaluating English-to-Filipino translations. Please assess the following translation based on these criteria:\n\n**Source Text (English):**\nThe children laughed and played under the afternoon sun.\n\n**Translation to Judge (Filipino):**\nAng mga bata ay nagtawanan at naglaro sa ilalim ng hapon na araw.\n\nPlease evaluate the translation on the following six criteria and provide a boolean rating (True/False) for each, along with a detailed explanation:\n\n1. **Accuracy**: Is the translation semantically accurate and faithful to the source text?\n2. **Fluency**: Does the translation read naturally and fluently in Filipino?\n3. **Coherence**: Is the translation logically coherent and well-structured?\n4. **Cultural Appropriateness**: Is the translation appropriate to Philippine culture and context?\n5. **Guideline Adherence**: Does the translation follow proper Filipino translation guidelines?\n6. **Completeness**: Is the translation complete without omissions or unnecessary additions?\n\nFor each criterion, provide:\n- A boolean rating (True for meets criteria, False for does not meet criteria)\n- A detailed explanation (2-3 sentences) justifying your rating\n\nBe thorough, objective, and specific in your evaluations.\n",
+      "llm_provider": "google",
+      "llm_model": "gemini-2.5-flash"
+    },
+    "llm_response": {
+      "success": true,
+      "data": {
+        "accuracy": false,
+        "accuracy_explanation": "The translation is mostly accurate, but the phrase \"hapon na araw\" is an overly literal translation of \"afternoon sun.\" A more accurate and idiomatic Filipino phrase would be \"sikat ng araw sa hapon\" or \"araw ng hapon.\"",
+        "fluency": false,
+        "fluency_explanation": "The phrase \"sa ilalim ng hapon na araw\" does not sound natural or fluent in Filipino. It is a stiff, word-for-word translation that breaks the natural flow of the sentence. A more natural phrasing would greatly improve readability.",
+        "coherence": true,
+        "coherence_explanation": "The translation maintains a logical structure and the relationship between the elements is clear. Despite some unnatural phrasing, the sentence's meaning is conveyed in a coherent manner.",
+        "cultural_appropriateness": true,
+        "cultural_appropriateness_explanation": "The translated content, depicting children playing under the sun, is universally relatable and culturally appropriate in the Philippine context. There are no elements that clash with local customs or sensibilities.",
+        "guideline_adherence": false,
+        "guideline_adherence_explanation": "The translation fails to adhere to the guideline of idiomatic expression in Filipino, particularly with \"hapon na araw.\" Good translation practice encourages natural phrasing over literal word-for-word rendering, which was not fully observed here.",
+        "completeness": true,
+        "completeness_explanation": "All information from the source text, including the subjects, actions, and setting, has been fully translated. There are no missing parts or unnecessary additions to the original meaning.",
+        "thought_summary": null
+      },
+      "raw_response": "{\n  \"accuracy\": false,\n  \"accuracy_explanation\": \"The translation is mostly accurate, but the phrase \\\"hapon na araw\\\" is an overly literal translation of \\\"afternoon sun.\\\" A more accurate and idiomatic Filipino phrase would be \\\"sikat ng araw sa hapon\\\" or \\\"araw ng hapon.\\\"\",\n  \"fluency\": false,\n  \"fluency_explanation\": \"The phrase \\\"sa ilalim ng hapon na araw\\\" does not sound natural or fluent in Filipino. It is a stiff, word-for-word translation that breaks the natural flow of the sentence. A more natural phrasing would greatly improve readability.\",\n  \"coherence\": true,\n  \"coherence_explanation\": \"The translation maintains a logical structure and the relationship between the elements is clear. Despite some unnatural phrasing, the sentence's meaning is conveyed in a coherent manner.\",\n  \"cultural_appropriateness\": true,\n  \"cultural_appropriateness_explanation\": \"The translated content, depicting children playing under the sun, is universally relatable and culturally appropriate in the Philippine context. There are no elements that clash with local customs or sensibilities.\",\n  \"guideline_adherence\": false,\n  \"guideline_adherence_explanation\": \"The translation fails to adhere to the guideline of idiomatic expression in Filipino, particularly with \\\"hapon na araw.\\\" Good translation practice encourages natural phrasing over literal word-for-word rendering, which was not fully observed here.\",\n  \"completeness\": true,\n  \"completeness_explanation\": \"All information from the source text, including the subjects, actions, and setting, has been fully translated. There are no missing parts or unnecessary additions to the original meaning.\",\n  \"thought_summary\": null\n}"
+    },
+    "final_score": {
+      "score": 3,
+      "label": "Good",
+      "color": "warning",
+      "true_count": 3,
+      "total_criteria": 6
+    },
+    "evaluation_metadata": {
+      "csv_row": 1,
+      "expected_good_translation": true,
+      "llm_pass": true,
+      "use_agentic": false,
+      "run_id": 2,
+      "run_total": 3,
+      "base_eval_id": "validation_set_row1_gemini-2-5-flash_prompt",
+      "unique_eval_id": "validation_set_row1_gemini-2-5-flash_prompt_run2",
+      "human_score": 4,
+      "has_human_scores": true,
+      "evaluation_parameters": {
+        "row_start": 1,
+        "row_end": 3,
+        "llm_model": "gemini-2.5-flash",
+        "use_agentic": false,
+        "reruns": 2
+      }
+    },
+    "metadata": {
+      "app_version": "1.0",
+      "filename": "auto_eval_20250729_120146_1_run2.json",
+      "saved_at": "2025-07-29T12:02:10.864703"
+    }
+  },
+  {
+    "timestamp": "2025-07-29T12:02:16.666532",
+    "request_data": {
+      "source_text": "She took a break to gather her thoughts.",
+      "fil_translation": "Nagpahinga siya para mag-isip-isip.",
+      "ref_translation": "",
+      "system_prompt": "You are an expert translation judge evaluating English-to-Filipino translations. Please assess the following translation based on these criteria:\n\n**Source Text (English):**\n{{source_text}}\n\n**Translation to Judge (Filipino):**\n{{fil_translation}}\n\nPlease evaluate the translation on the following six criteria and provide a boolean rating (True/False) for each, along with a detailed explanation:\n\n1. **Accuracy**: Is the translation semantically accurate and faithful to the source text?\n2. **Fluency**: Does the translation read naturally and fluently in Filipino?\n3. **Coherence**: Is the translation logically coherent and well-structured?\n4. **Cultural Appropriateness**: Is the translation appropriate to Philippine culture and context?\n5. **Guideline Adherence**: Does the translation follow proper Filipino translation guidelines?\n6. **Completeness**: Is the translation complete without omissions or unnecessary additions?\n\nFor each criterion, provide:\n- A boolean rating (True for meets criteria, False for does not meet criteria)\n- A detailed explanation (2-3 sentences) justifying your rating\n\nBe thorough, objective, and specific in your evaluations.\n",
+      "raw_prompt": "You are an expert translation judge evaluating English-to-Filipino translations. Please assess the following translation based on these criteria:\n\n**Source Text (English):**\nShe took a break to gather her thoughts.\n\n**Translation to Judge (Filipino):**\nNagpahinga siya para mag-isip-isip.\n\nPlease evaluate the translation on the following six criteria and provide a boolean rating (True/False) for each, along with a detailed explanation:\n\n1. **Accuracy**: Is the translation semantically accurate and faithful to the source text?\n2. **Fluency**: Does the translation read naturally and fluently in Filipino?\n3. **Coherence**: Is the translation logically coherent and well-structured?\n4. **Cultural Appropriateness**: Is the translation appropriate to Philippine culture and context?\n5. **Guideline Adherence**: Does the translation follow proper Filipino translation guidelines?\n6. **Completeness**: Is the translation complete without omissions or unnecessary additions?\n\nFor each criterion, provide:\n- A boolean rating (True for meets criteria, False for does not meet criteria)\n- A detailed explanation (2-3 sentences) justifying your rating\n\nBe thorough, objective, and specific in your evaluations.\n",
+      "llm_provider": "google",
+      "llm_model": "gemini-2.5-flash"
+    },
+    "llm_response": {
+      "success": true,
+      "data": {
+        "accuracy": true,
+        "accuracy_explanation": "The translation accurately conveys the meaning of the source text. \"Nagpahinga siya\" correctly translates \"She took a break,\" and \"para mag-isip-isip\" is an excellent idiomatic translation for \"to gather her thoughts,\" implying a pause for reflection.",
+        "fluency": true,
+        "fluency_explanation": "The translation reads very naturally and fluently in Filipino. The phrasing \"Nagpahinga siya para mag-isip-isip\" is a common and idiomatic expression that sounds completely native.",
+        "coherence": true,
+        "coherence_explanation": "The translation is logically coherent and well-structured. The causal link between taking a break and thinking/reflecting is clearly maintained, and the sentence flows smoothly.",
+        "cultural_appropriateness": true,
+        "cultural_appropriateness_explanation": "The translation uses culturally appropriate language. The phrase \"mag-isip-isip\" is commonly used in Filipino to denote a period of thoughtful consideration or reflection, making it culturally fitting.",
+        "guideline_adherence": true,
+        "guideline_adherence_explanation": "The translation adheres to proper Filipino translation guidelines by using standard vocabulary and grammatical structures. It maintains the register and simple nature of the original sentence without introducing any colloquialisms or overly formal terms.",
+        "completeness": true,
+        "completeness_explanation": "The translation is complete and does not omit any information from the source text, nor does it add any unnecessary elements. All key components of the original sentence are fully represented in the Filipino version.",
+        "thought_summary": "The translation is highly accurate and fluent, effectively capturing the nuanced meaning of 'to gather her thoughts' with the idiomatic Filipino expression 'mag-isip-isip'. It is a natural and complete rendition of the source text."
+      },
+      "raw_response": "{\n  \"accuracy\": true,\n  \"accuracy_explanation\": \"The translation accurately conveys the meaning of the source text. \\\"Nagpahinga siya\\\" correctly translates \\\"She took a break,\\\" and \\\"para mag-isip-isip\\\" is an excellent idiomatic translation for \\\"to gather her thoughts,\\\" implying a pause for reflection.\",\n  \"fluency\": true,\n  \"fluency_explanation\": \"The translation reads very naturally and fluently in Filipino. The phrasing \\\"Nagpahinga siya para mag-isip-isip\\\" is a common and idiomatic expression that sounds completely native.\",\n  \"coherence\": true,\n  \"coherence_explanation\": \"The translation is logically coherent and well-structured. The causal link between taking a break and thinking/reflecting is clearly maintained, and the sentence flows smoothly.\",\n  \"cultural_appropriateness\": true,\n  \"cultural_appropriateness_explanation\": \"The translation uses culturally appropriate language. The phrase \\\"mag-isip-isip\\\" is commonly used in Filipino to denote a period of thoughtful consideration or reflection, making it culturally fitting.\",\n  \"guideline_adherence\": true,\n  \"guideline_adherence_explanation\": \"The translation adheres to proper Filipino translation guidelines by using standard vocabulary and grammatical structures. It maintains the register and simple nature of the original sentence without introducing any colloquialisms or overly formal terms.\",\n  \"completeness\": true,\n  \"completeness_explanation\": \"The translation is complete and does not omit any information from the source text, nor does it add any unnecessary elements. All key components of the original sentence are fully represented in the Filipino version.\",\n  \"thought_summary\": \"The translation is highly accurate and fluent, effectively capturing the nuanced meaning of 'to gather her thoughts' with the idiomatic Filipino expression 'mag-isip-isip'. It is a natural and complete rendition of the source text.\"\n}"
+    },
+    "final_score": {
+      "score": 5,
+      "label": "Excellent",
+      "color": "success",
+      "true_count": 6,
+      "total_criteria": 6
+    },
+    "evaluation_metadata": {
+      "csv_row": 2,
+      "expected_good_translation": true,
+      "llm_pass": true,
+      "use_agentic": false,
+      "run_id": 0,
+      "run_total": 3,
+      "base_eval_id": "validation_set_row2_gemini-2-5-flash_prompt",
+      "unique_eval_id": "validation_set_row2_gemini-2-5-flash_prompt_run0",
+      "human_score": 4,
+      "has_human_scores": true,
+      "evaluation_parameters": {
+        "row_start": 1,
+        "row_end": 3,
+        "llm_model": "gemini-2.5-flash",
+        "use_agentic": false,
+        "reruns": 2
+      }
+    },
+    "metadata": {
+      "app_version": "1.0",
+      "filename": "auto_eval_20250729_120146_2_run0.json",
+      "saved_at": "2025-07-29T12:02:16.666532"
+    }
+  },
+  {
+    "timestamp": "2025-07-29T12:02:23.473942",
+    "request_data": {
+      "source_text": "She took a break to gather her thoughts.",
+      "fil_translation": "Nagpahinga siya para mag-isip-isip.",
+      "ref_translation": "",
+      "system_prompt": "You are an expert translation judge evaluating English-to-Filipino translations. Please assess the following translation based on these criteria:\n\n**Source Text (English):**\n{{source_text}}\n\n**Translation to Judge (Filipino):**\n{{fil_translation}}\n\nPlease evaluate the translation on the following six criteria and provide a boolean rating (True/False) for each, along with a detailed explanation:\n\n1. **Accuracy**: Is the translation semantically accurate and faithful to the source text?\n2. **Fluency**: Does the translation read naturally and fluently in Filipino?\n3. **Coherence**: Is the translation logically coherent and well-structured?\n4. **Cultural Appropriateness**: Is the translation appropriate to Philippine culture and context?\n5. **Guideline Adherence**: Does the translation follow proper Filipino translation guidelines?\n6. **Completeness**: Is the translation complete without omissions or unnecessary additions?\n\nFor each criterion, provide:\n- A boolean rating (True for meets criteria, False for does not meet criteria)\n- A detailed explanation (2-3 sentences) justifying your rating\n\nBe thorough, objective, and specific in your evaluations.\n",
+      "raw_prompt": "You are an expert translation judge evaluating English-to-Filipino translations. Please assess the following translation based on these criteria:\n\n**Source Text (English):**\nShe took a break to gather her thoughts.\n\n**Translation to Judge (Filipino):**\nNagpahinga siya para mag-isip-isip.\n\nPlease evaluate the translation on the following six criteria and provide a boolean rating (True/False) for each, along with a detailed explanation:\n\n1. **Accuracy**: Is the translation semantically accurate and faithful to the source text?\n2. **Fluency**: Does the translation read naturally and fluently in Filipino?\n3. **Coherence**: Is the translation logically coherent and well-structured?\n4. **Cultural Appropriateness**: Is the translation appropriate to Philippine culture and context?\n5. **Guideline Adherence**: Does the translation follow proper Filipino translation guidelines?\n6. **Completeness**: Is the translation complete without omissions or unnecessary additions?\n\nFor each criterion, provide:\n- A boolean rating (True for meets criteria, False for does not meet criteria)\n- A detailed explanation (2-3 sentences) justifying your rating\n\nBe thorough, objective, and specific in your evaluations.\n",
+      "llm_provider": "google",
+      "llm_model": "gemini-2.5-flash"
+    },
+    "llm_response": {
+      "success": true,
+      "data": {
+        "accuracy": true,
+        "accuracy_explanation": "The translation accurately conveys the meaning of the source text. \"Nagpahinga siya\" correctly translates \"She took a break,\" and \"para mag-isip-isip\" appropriately renders \"to gather her thoughts\" by implying a period of reflection.",
+        "fluency": true,
+        "fluency_explanation": "The translated sentence flows naturally and uses common Filipino phrasing. The choice of \"mag-isip-isip\" is a very natural and idiomatic way to express the idea of needing time to think or reflect.",
+        "coherence": true,
+        "coherence_explanation": "The translation is logically coherent and easy to understand. The connection between taking a break and gathering one's thoughts is clearly maintained in the Filipino sentence structure.",
+        "cultural_appropriateness": true,
+        "cultural_appropriateness_explanation": "The translation uses culturally appropriate language, as \"mag-isip-isip\" is a common and polite way to express the need for reflection in Filipino culture. There are no elements that would be considered inappropriate or misunderstood within the local context.",
+        "guideline_adherence": true,
+        "guideline_adherence_explanation": "The translation adheres to standard Filipino translation guidelines by providing an accurate and natural-sounding equivalent. It avoids literal word-for-word translation in favor of an idiomatic expression that conveys the intended meaning effectively.",
+        "completeness": true,
+        "completeness_explanation": "The translation is complete, with no omissions or unnecessary additions from the source text. Every significant element of the original sentence has been accurately conveyed in the Filipino translation.",
+        "thought_summary": "The translation is excellent and captures the full meaning of the source text with natural Filipino phrasing. \"Mag-isip-isip\" is an idiomatic and perfectly fitting translation for \"gather her thoughts.\""
+      },
+      "raw_response": "{\n  \"accuracy\": true,\n  \"accuracy_explanation\": \"The translation accurately conveys the meaning of the source text. \\\"Nagpahinga siya\\\" correctly translates \\\"She took a break,\\\" and \\\"para mag-isip-isip\\\" appropriately renders \\\"to gather her thoughts\\\" by implying a period of reflection.\",\n  \"fluency\": true,\n  \"fluency_explanation\": \"The translated sentence flows naturally and uses common Filipino phrasing. The choice of \\\"mag-isip-isip\\\" is a very natural and idiomatic way to express the idea of needing time to think or reflect.\",\n  \"coherence\": true,\n  \"coherence_explanation\": \"The translation is logically coherent and easy to understand. The connection between taking a break and gathering one's thoughts is clearly maintained in the Filipino sentence structure.\",\n  \"cultural_appropriateness\": true,\n  \"cultural_appropriateness_explanation\": \"The translation uses culturally appropriate language, as \\\"mag-isip-isip\\\" is a common and polite way to express the need for reflection in Filipino culture. There are no elements that would be considered inappropriate or misunderstood within the local context.\",\n  \"guideline_adherence\": true,\n  \"guideline_adherence_explanation\": \"The translation adheres to standard Filipino translation guidelines by providing an accurate and natural-sounding equivalent. It avoids literal word-for-word translation in favor of an idiomatic expression that conveys the intended meaning effectively.\",\n  \"completeness\": true,\n  \"completeness_explanation\": \"The translation is complete, with no omissions or unnecessary additions from the source text. Every significant element of the original sentence has been accurately conveyed in the Filipino translation.\",\n  \"thought_summary\": \"The translation is excellent and captures the full meaning of the source text with natural Filipino phrasing. \\\"Mag-isip-isip\\\" is an idiomatic and perfectly fitting translation for \\\"gather her thoughts.\\\"\"\n}"
+    },
+    "final_score": {
+      "score": 5,
+      "label": "Excellent",
+      "color": "success",
+      "true_count": 6,
+      "total_criteria": 6
+    },
+    "evaluation_metadata": {
+      "csv_row": 2,
+      "expected_good_translation": true,
+      "llm_pass": true,
+      "use_agentic": false,
+      "run_id": 1,
+      "run_total": 3,
+      "base_eval_id": "validation_set_row2_gemini-2-5-flash_prompt",
+      "unique_eval_id": "validation_set_row2_gemini-2-5-flash_prompt_run1",
+      "human_score": 4,
+      "has_human_scores": true,
+      "evaluation_parameters": {
+        "row_start": 1,
+        "row_end": 3,
+        "llm_model": "gemini-2.5-flash",
+        "use_agentic": false,
+        "reruns": 2
+      }
+    },
+    "metadata": {
+      "app_version": "1.0",
+      "filename": "auto_eval_20250729_120146_2_run1.json",
+      "saved_at": "2025-07-29T12:02:23.473942"
+    }
+  },
+  {
+    "timestamp": "2025-07-29T12:02:29.289878",
+    "request_data": {
+      "source_text": "She took a break to gather her thoughts.",
+      "fil_translation": "Nagpahinga siya para mag-isip-isip.",
+      "ref_translation": "",
+      "system_prompt": "You are an expert translation judge evaluating English-to-Filipino translations. Please assess the following translation based on these criteria:\n\n**Source Text (English):**\n{{source_text}}\n\n**Translation to Judge (Filipino):**\n{{fil_translation}}\n\nPlease evaluate the translation on the following six criteria and provide a boolean rating (True/False) for each, along with a detailed explanation:\n\n1. **Accuracy**: Is the translation semantically accurate and faithful to the source text?\n2. **Fluency**: Does the translation read naturally and fluently in Filipino?\n3. **Coherence**: Is the translation logically coherent and well-structured?\n4. **Cultural Appropriateness**: Is the translation appropriate to Philippine culture and context?\n5. **Guideline Adherence**: Does the translation follow proper Filipino translation guidelines?\n6. **Completeness**: Is the translation complete without omissions or unnecessary additions?\n\nFor each criterion, provide:\n- A boolean rating (True for meets criteria, False for does not meet criteria)\n- A detailed explanation (2-3 sentences) justifying your rating\n\nBe thorough, objective, and specific in your evaluations.\n",
+      "raw_prompt": "You are an expert translation judge evaluating English-to-Filipino translations. Please assess the following translation based on these criteria:\n\n**Source Text (English):**\nShe took a break to gather her thoughts.\n\n**Translation to Judge (Filipino):**\nNagpahinga siya para mag-isip-isip.\n\nPlease evaluate the translation on the following six criteria and provide a boolean rating (True/False) for each, along with a detailed explanation:\n\n1. **Accuracy**: Is the translation semantically accurate and faithful to the source text?\n2. **Fluency**: Does the translation read naturally and fluently in Filipino?\n3. **Coherence**: Is the translation logically coherent and well-structured?\n4. **Cultural Appropriateness**: Is the translation appropriate to Philippine culture and context?\n5. **Guideline Adherence**: Does the translation follow proper Filipino translation guidelines?\n6. **Completeness**: Is the translation complete without omissions or unnecessary additions?\n\nFor each criterion, provide:\n- A boolean rating (True for meets criteria, False for does not meet criteria)\n- A detailed explanation (2-3 sentences) justifying your rating\n\nBe thorough, objective, and specific in your evaluations.\n",
+      "llm_provider": "google",
+      "llm_model": "gemini-2.5-flash"
+    },
+    "llm_response": {
+      "success": true,
+      "data": {
+        "accuracy": true,
+        "accuracy_explanation": "The translation accurately conveys the core meaning of the source text. While \"gather her thoughts\" could be more literally translated, \"mag-isip-isip\" naturally expresses the idea of taking time to reflect or process one's thoughts, which is the underlying purpose.",
+        "fluency": true,
+        "fluency_explanation": "The translated sentence flows very naturally in Filipino. It uses common vocabulary and a typical sentence structure, making it sound like a native speaker would say it.",
+        "coherence": true,
+        "coherence_explanation": "The translation is logically coherent and well-structured. The subject, verb, and purpose are clearly articulated, making the sentence easy to understand.",
+        "cultural_appropriateness": true,
+        "cultural_appropriateness_explanation": "The phrase \"mag-isip-isip\" is a common and culturally appropriate expression in Filipino. There are no elements in the translation that would be considered offensive or out of place in a Philippine context.",
+        "guideline_adherence": true,
+        "guideline_adherence_explanation": "The translation adheres to good Filipino translation guidelines by prioritizing naturalness over strict literalism. It captures the spirit of the English phrase using an idiomatic equivalent in Filipino.",
+        "completeness": true,
+        "completeness_explanation": "The translation is complete, conveying all essential information from the source text without any omissions. It also does not introduce any unnecessary additions.",
+        "thought_summary": null
+      },
+      "raw_response": "{\n  \"accuracy\": true,\n  \"accuracy_explanation\": \"The translation accurately conveys the core meaning of the source text. While \\\"gather her thoughts\\\" could be more literally translated, \\\"mag-isip-isip\\\" naturally expresses the idea of taking time to reflect or process one's thoughts, which is the underlying purpose.\",\n  \"fluency\": true,\n  \"fluency_explanation\": \"The translated sentence flows very naturally in Filipino. It uses common vocabulary and a typical sentence structure, making it sound like a native speaker would say it.\",\n  \"coherence\": true,\n  \"coherence_explanation\": \"The translation is logically coherent and well-structured. The subject, verb, and purpose are clearly articulated, making the sentence easy to understand.\",\n  \"cultural_appropriateness\": true,\n  \"cultural_appropriateness_explanation\": \"The phrase \\\"mag-isip-isip\\\" is a common and culturally appropriate expression in Filipino. There are no elements in the translation that would be considered offensive or out of place in a Philippine context.\",\n  \"guideline_adherence\": true,\n  \"guideline_adherence_explanation\": \"The translation adheres to good Filipino translation guidelines by prioritizing naturalness over strict literalism. It captures the spirit of the English phrase using an idiomatic equivalent in Filipino.\",\n  \"completeness\": true,\n  \"completeness_explanation\": \"The translation is complete, conveying all essential information from the source text without any omissions. It also does not introduce any unnecessary additions.\",\n  \"thought_summary\": null\n}"
+    },
+    "final_score": {
+      "score": 5,
+      "label": "Excellent",
+      "color": "success",
+      "true_count": 6,
+      "total_criteria": 6
+    },
+    "evaluation_metadata": {
+      "csv_row": 2,
+      "expected_good_translation": true,
+      "llm_pass": true,
+      "use_agentic": false,
+      "run_id": 2,
+      "run_total": 3,
+      "base_eval_id": "validation_set_row2_gemini-2-5-flash_prompt",
+      "unique_eval_id": "validation_set_row2_gemini-2-5-flash_prompt_run2",
+      "human_score": 4,
+      "has_human_scores": true,
+      "evaluation_parameters": {
+        "row_start": 1,
+        "row_end": 3,
+        "llm_model": "gemini-2.5-flash",
+        "use_agentic": false,
+        "reruns": 2
+      }
+    },
+    "metadata": {
+      "app_version": "1.0",
+      "filename": "auto_eval_20250729_120146_2_run2.json",
+      "saved_at": "2025-07-29T12:02:29.289878"
+    }
+  },
+  {
+    "timestamp": "2025-07-29T12:02:35.102450",
+    "request_data": {
+      "source_text": "The algorithm efficiently identifies patterns in large datasets.",
+      "fil_translation": "Mabisang kinikilala ng algoritmo ang mga pattern sa malalaking dataset.",
+      "ref_translation": "",
+      "system_prompt": "You are an expert translation judge evaluating English-to-Filipino translations. Please assess the following translation based on these criteria:\n\n**Source Text (English):**\n{{source_text}}\n\n**Translation to Judge (Filipino):**\n{{fil_translation}}\n\nPlease evaluate the translation on the following six criteria and provide a boolean rating (True/False) for each, along with a detailed explanation:\n\n1. **Accuracy**: Is the translation semantically accurate and faithful to the source text?\n2. **Fluency**: Does the translation read naturally and fluently in Filipino?\n3. **Coherence**: Is the translation logically coherent and well-structured?\n4. **Cultural Appropriateness**: Is the translation appropriate to Philippine culture and context?\n5. **Guideline Adherence**: Does the translation follow proper Filipino translation guidelines?\n6. **Completeness**: Is the translation complete without omissions or unnecessary additions?\n\nFor each criterion, provide:\n- A boolean rating (True for meets criteria, False for does not meet criteria)\n- A detailed explanation (2-3 sentences) justifying your rating\n\nBe thorough, objective, and specific in your evaluations.\n",
+      "raw_prompt": "You are an expert translation judge evaluating English-to-Filipino translations. Please assess the following translation based on these criteria:\n\n**Source Text (English):**\nThe algorithm efficiently identifies patterns in large datasets.\n\n**Translation to Judge (Filipino):**\nMabisang kinikilala ng algoritmo ang mga pattern sa malalaking dataset.\n\nPlease evaluate the translation on the following six criteria and provide a boolean rating (True/False) for each, along with a detailed explanation:\n\n1. **Accuracy**: Is the translation semantically accurate and faithful to the source text?\n2. **Fluency**: Does the translation read naturally and fluently in Filipino?\n3. **Coherence**: Is the translation logically coherent and well-structured?\n4. **Cultural Appropriateness**: Is the translation appropriate to Philippine culture and context?\n5. **Guideline Adherence**: Does the translation follow proper Filipino translation guidelines?\n6. **Completeness**: Is the translation complete without omissions or unnecessary additions?\n\nFor each criterion, provide:\n- A boolean rating (True for meets criteria, False for does not meet criteria)\n- A detailed explanation (2-3 sentences) justifying your rating\n\nBe thorough, objective, and specific in your evaluations.\n",
+      "llm_provider": "google",
+      "llm_model": "gemini-2.5-flash"
+    },
+    "llm_response": {
+      "success": true,
+      "data": {
+        "accuracy": true,
+        "accuracy_explanation": "The translation accurately conveys the meaning of the source text. Phrases like \"efficiently identifies\" are correctly rendered as \"Mabisang kinikilala,\" and \"large datasets\" as \"malalaking dataset.\"",
+        "fluency": true,
+        "fluency_explanation": "The Filipino translation reads naturally and smoothly. The word order and choice of words make it sound like an original Filipino sentence, not a direct, stiff translation.",
+        "coherence": true,
+        "coherence_explanation": "The translation maintains the logical flow and structure of the original sentence. There are no disjointed phrases or grammatical constructions that impede understanding.",
+        "cultural_appropriateness": true,
+        "cultural_appropriateness_explanation": "The content is technical and uses commonly accepted loanwords (algoritmo, pattern, dataset) in Filipino. There are no cultural nuances or sensitive topics involved, making it universally appropriate.",
+        "guideline_adherence": true,
+        "guideline_adherence_explanation": "The translation adheres to standard Filipino grammatical rules and word usage. It correctly pluralizes nouns and adjectives and uses appropriate adverbs and prepositions, which are common practices in Filipino translation.",
+        "completeness": true,
+        "completeness_explanation": "All elements of the source text have been translated without any omissions or unnecessary additions. The meaning is fully preserved in the target language.",
+        "thought_summary": "The translation is a highly accurate and fluent rendition of the source text. It effectively uses appropriate Filipino vocabulary and grammatical structures, making it sound natural and coherent while maintaining fidelity to the original meaning."
+      },
+      "raw_response": "{\n  \"accuracy\": true,\n  \"accuracy_explanation\": \"The translation accurately conveys the meaning of the source text. Phrases like \\\"efficiently identifies\\\" are correctly rendered as \\\"Mabisang kinikilala,\\\" and \\\"large datasets\\\" as \\\"malalaking dataset.\\\"\",\n  \"fluency\": true,\n  \"fluency_explanation\": \"The Filipino translation reads naturally and smoothly. The word order and choice of words make it sound like an original Filipino sentence, not a direct, stiff translation.\",\n  \"coherence\": true,\n  \"coherence_explanation\": \"The translation maintains the logical flow and structure of the original sentence. There are no disjointed phrases or grammatical constructions that impede understanding.\",\n  \"cultural_appropriateness\": true,\n  \"cultural_appropriateness_explanation\": \"The content is technical and uses commonly accepted loanwords (algoritmo, pattern, dataset) in Filipino. There are no cultural nuances or sensitive topics involved, making it universally appropriate.\",\n  \"guideline_adherence\": true,\n  \"guideline_adherence_explanation\": \"The translation adheres to standard Filipino grammatical rules and word usage. It correctly pluralizes nouns and adjectives and uses appropriate adverbs and prepositions, which are common practices in Filipino translation.\",\n  \"completeness\": true,\n  \"completeness_explanation\": \"All elements of the source text have been translated without any omissions or unnecessary additions. The meaning is fully preserved in the target language.\",\n  \"thought_summary\": \"The translation is a highly accurate and fluent rendition of the source text. It effectively uses appropriate Filipino vocabulary and grammatical structures, making it sound natural and coherent while maintaining fidelity to the original meaning.\"\n}"
+    },
+    "final_score": {
+      "score": 5,
+      "label": "Excellent",
+      "color": "success",
+      "true_count": 6,
+      "total_criteria": 6
+    },
+    "evaluation_metadata": {
+      "csv_row": 3,
+      "expected_good_translation": true,
+      "llm_pass": true,
+      "use_agentic": false,
+      "run_id": 0,
+      "run_total": 3,
+      "base_eval_id": "validation_set_row3_gemini-2-5-flash_prompt",
+      "unique_eval_id": "validation_set_row3_gemini-2-5-flash_prompt_run0",
+      "human_score": 3,
+      "has_human_scores": true,
+      "evaluation_parameters": {
+        "row_start": 1,
+        "row_end": 3,
+        "llm_model": "gemini-2.5-flash",
+        "use_agentic": false,
+        "reruns": 2
+      }
+    },
+    "metadata": {
+      "app_version": "1.0",
+      "filename": "auto_eval_20250729_120146_3_run0.json",
+      "saved_at": "2025-07-29T12:02:35.102450"
+    }
+  },
+  {
+    "timestamp": "2025-07-29T12:02:40.892632",
+    "request_data": {
+      "source_text": "The algorithm efficiently identifies patterns in large datasets.",
+      "fil_translation": "Mabisang kinikilala ng algoritmo ang mga pattern sa malalaking dataset.",
+      "ref_translation": "",
+      "system_prompt": "You are an expert translation judge evaluating English-to-Filipino translations. Please assess the following translation based on these criteria:\n\n**Source Text (English):**\n{{source_text}}\n\n**Translation to Judge (Filipino):**\n{{fil_translation}}\n\nPlease evaluate the translation on the following six criteria and provide a boolean rating (True/False) for each, along with a detailed explanation:\n\n1. **Accuracy**: Is the translation semantically accurate and faithful to the source text?\n2. **Fluency**: Does the translation read naturally and fluently in Filipino?\n3. **Coherence**: Is the translation logically coherent and well-structured?\n4. **Cultural Appropriateness**: Is the translation appropriate to Philippine culture and context?\n5. **Guideline Adherence**: Does the translation follow proper Filipino translation guidelines?\n6. **Completeness**: Is the translation complete without omissions or unnecessary additions?\n\nFor each criterion, provide:\n- A boolean rating (True for meets criteria, False for does not meet criteria)\n- A detailed explanation (2-3 sentences) justifying your rating\n\nBe thorough, objective, and specific in your evaluations.\n",
+      "raw_prompt": "You are an expert translation judge evaluating English-to-Filipino translations. Please assess the following translation based on these criteria:\n\n**Source Text (English):**\nThe algorithm efficiently identifies patterns in large datasets.\n\n**Translation to Judge (Filipino):**\nMabisang kinikilala ng algoritmo ang mga pattern sa malalaking dataset.\n\nPlease evaluate the translation on the following six criteria and provide a boolean rating (True/False) for each, along with a detailed explanation:\n\n1. **Accuracy**: Is the translation semantically accurate and faithful to the source text?\n2. **Fluency**: Does the translation read naturally and fluently in Filipino?\n3. **Coherence**: Is the translation logically coherent and well-structured?\n4. **Cultural Appropriateness**: Is the translation appropriate to Philippine culture and context?\n5. **Guideline Adherence**: Does the translation follow proper Filipino translation guidelines?\n6. **Completeness**: Is the translation complete without omissions or unnecessary additions?\n\nFor each criterion, provide:\n- A boolean rating (True for meets criteria, False for does not meet criteria)\n- A detailed explanation (2-3 sentences) justifying your rating\n\nBe thorough, objective, and specific in your evaluations.\n",
+      "llm_provider": "google",
+      "llm_model": "gemini-2.5-flash"
+    },
+    "llm_response": {
+      "success": true,
+      "data": {
+        "accuracy": true,
+        "accuracy_explanation": "The translation accurately conveys the meaning of the source text. All key terms like 'algorithm,' 'efficiently,' 'identifies,' 'patterns,' and 'large datasets' are correctly translated or appropriately retained in their commonly accepted forms in Filipino.",
+        "fluency": true,
+        "fluency_explanation": "The Filipino translation reads very naturally and fluently. The word order and grammatical structures used are common and sound organic to a native Filipino speaker, making the sentence easy to understand.",
+        "coherence": true,
+        "coherence_explanation": "The translation is logically coherent and well-structured. It presents the information in a clear and understandable manner, maintaining the original sentence's logical flow and grammatical correctness in Filipino.",
+        "cultural_appropriateness": true,
+        "cultural_appropriateness_explanation": "The technical terms 'algoritmo,' 'pattern,' and 'dataset' are commonly adopted and understood in Filipino technical discourse. There are no cultural nuances or expressions in the source that would require specific cultural adaptation, making the direct translation appropriate for the Philippine context.",
+        "guideline_adherence": true,
+        "guideline_adherence_explanation": "The translation adheres to standard Filipino translation guidelines, utilizing correct grammar, word choice, and appropriate borrowing of technical terms. It effectively renders the English sentence into grammatically sound and meaningful Filipino.",
+        "completeness": true,
+        "completeness_explanation": "The translation is complete, with no omissions or unnecessary additions of information. Every element present in the source text has a corresponding translation in the Filipino version, ensuring all meaning is retained.",
+        "thought_summary": null
+      },
+      "raw_response": "{\n  \"accuracy\": true,\n  \"accuracy_explanation\": \"The translation accurately conveys the meaning of the source text. All key terms like 'algorithm,' 'efficiently,' 'identifies,' 'patterns,' and 'large datasets' are correctly translated or appropriately retained in their commonly accepted forms in Filipino.\",\n  \"fluency\": true,\n  \"fluency_explanation\": \"The Filipino translation reads very naturally and fluently. The word order and grammatical structures used are common and sound organic to a native Filipino speaker, making the sentence easy to understand.\",\n  \"coherence\": true,\n  \"coherence_explanation\": \"The translation is logically coherent and well-structured. It presents the information in a clear and understandable manner, maintaining the original sentence's logical flow and grammatical correctness in Filipino.\",\n  \"cultural_appropriateness\": true,\n  \"cultural_appropriateness_explanation\": \"The technical terms 'algoritmo,' 'pattern,' and 'dataset' are commonly adopted and understood in Filipino technical discourse. There are no cultural nuances or expressions in the source that would require specific cultural adaptation, making the direct translation appropriate for the Philippine context.\",\n  \"guideline_adherence\": true,\n  \"guideline_adherence_explanation\": \"The translation adheres to standard Filipino translation guidelines, utilizing correct grammar, word choice, and appropriate borrowing of technical terms. It effectively renders the English sentence into grammatically sound and meaningful Filipino.\",\n  \"completeness\": true,\n  \"completeness_explanation\": \"The translation is complete, with no omissions or unnecessary additions of information. Every element present in the source text has a corresponding translation in the Filipino version, ensuring all meaning is retained.\",\n  \"thought_summary\": null\n}"
+    },
+    "final_score": {
+      "score": 5,
+      "label": "Excellent",
+      "color": "success",
+      "true_count": 6,
+      "total_criteria": 6
+    },
+    "evaluation_metadata": {
+      "csv_row": 3,
+      "expected_good_translation": true,
+      "llm_pass": true,
+      "use_agentic": false,
+      "run_id": 1,
+      "run_total": 3,
+      "base_eval_id": "validation_set_row3_gemini-2-5-flash_prompt",
+      "unique_eval_id": "validation_set_row3_gemini-2-5-flash_prompt_run1",
+      "human_score": 3,
+      "has_human_scores": true,
+      "evaluation_parameters": {
+        "row_start": 1,
+        "row_end": 3,
+        "llm_model": "gemini-2.5-flash",
+        "use_agentic": false,
+        "reruns": 2
+      }
+    },
+    "metadata": {
+      "app_version": "1.0",
+      "filename": "auto_eval_20250729_120146_3_run1.json",
+      "saved_at": "2025-07-29T12:02:40.892632"
+    }
+  },
+  {
+    "timestamp": "2025-07-29T12:02:46.689658",
+    "request_data": {
+      "source_text": "The algorithm efficiently identifies patterns in large datasets.",
+      "fil_translation": "Mabisang kinikilala ng algoritmo ang mga pattern sa malalaking dataset.",
+      "ref_translation": "",
+      "system_prompt": "You are an expert translation judge evaluating English-to-Filipino translations. Please assess the following translation based on these criteria:\n\n**Source Text (English):**\n{{source_text}}\n\n**Translation to Judge (Filipino):**\n{{fil_translation}}\n\nPlease evaluate the translation on the following six criteria and provide a boolean rating (True/False) for each, along with a detailed explanation:\n\n1. **Accuracy**: Is the translation semantically accurate and faithful to the source text?\n2. **Fluency**: Does the translation read naturally and fluently in Filipino?\n3. **Coherence**: Is the translation logically coherent and well-structured?\n4. **Cultural Appropriateness**: Is the translation appropriate to Philippine culture and context?\n5. **Guideline Adherence**: Does the translation follow proper Filipino translation guidelines?\n6. **Completeness**: Is the translation complete without omissions or unnecessary additions?\n\nFor each criterion, provide:\n- A boolean rating (True for meets criteria, False for does not meet criteria)\n- A detailed explanation (2-3 sentences) justifying your rating\n\nBe thorough, objective, and specific in your evaluations.\n",
+      "raw_prompt": "You are an expert translation judge evaluating English-to-Filipino translations. Please assess the following translation based on these criteria:\n\n**Source Text (English):**\nThe algorithm efficiently identifies patterns in large datasets.\n\n**Translation to Judge (Filipino):**\nMabisang kinikilala ng algoritmo ang mga pattern sa malalaking dataset.\n\nPlease evaluate the translation on the following six criteria and provide a boolean rating (True/False) for each, along with a detailed explanation:\n\n1. **Accuracy**: Is the translation semantically accurate and faithful to the source text?\n2. **Fluency**: Does the translation read naturally and fluently in Filipino?\n3. **Coherence**: Is the translation logically coherent and well-structured?\n4. **Cultural Appropriateness**: Is the translation appropriate to Philippine culture and context?\n5. **Guideline Adherence**: Does the translation follow proper Filipino translation guidelines?\n6. **Completeness**: Is the translation complete without omissions or unnecessary additions?\n\nFor each criterion, provide:\n- A boolean rating (True for meets criteria, False for does not meet criteria)\n- A detailed explanation (2-3 sentences) justifying your rating\n\nBe thorough, objective, and specific in your evaluations.\n",
+      "llm_provider": "google",
+      "llm_model": "gemini-2.5-flash"
+    },
+    "llm_response": {
+      "success": true,
+      "data": {
+        "accuracy": true,
+        "accuracy_explanation": "The translation accurately conveys the meaning of the source text. 'Mabisang' correctly translates 'efficiently,' 'kinikilala' is a good equivalent for 'identifies,' and 'mga pattern' and 'malalaking dataset' are accurate for 'patterns' and 'large datasets,' respectively.",
+        "fluency": true,
+        "fluency_explanation": "The translation reads very naturally and fluently in Filipino. The word order and grammatical structure, 'Mabisang kinikilala ng algoritmo ang mga pattern...', are idiomatic and common in Filipino.",
+        "coherence": true,
+        "coherence_explanation": "The translation is logically coherent and well-structured, directly mirroring the simple structure of the source sentence. It is easy to understand and flows smoothly as a single thought.",
+        "cultural_appropriateness": true,
+        "cultural_appropriateness_explanation": "The content is technical and universal, and the language used is standard Filipino. There are no elements within the translation that are culturally inappropriate or insensitive to the Philippine context.",
+        "guideline_adherence": true,
+        "guideline_adherence_explanation": "The translation adheres to proper Filipino translation guidelines by using appropriate vocabulary, correct grammar, and natural sentence construction. It also properly integrates loanwords like 'algoritmo' and 'dataset' into the Filipino grammatical structure.",
+        "completeness": true,
+        "completeness_explanation": "The translation is complete, with no omissions of information present in the source text. It also does not introduce any unnecessary additions, maintaining conciseness.",
+        "thought_summary": "The translation is excellent across all criteria. It is semantically accurate, reads naturally and fluently, is coherent, culturally appropriate, adheres to translation guidelines, and is complete without any omissions or additions. It effectively conveys the technical meaning in clear and idiomatic Filipino."
+      },
+      "raw_response": "{\n  \"accuracy\": true,\n  \"accuracy_explanation\": \"The translation accurately conveys the meaning of the source text. 'Mabisang' correctly translates 'efficiently,' 'kinikilala' is a good equivalent for 'identifies,' and 'mga pattern' and 'malalaking dataset' are accurate for 'patterns' and 'large datasets,' respectively.\",\n  \"fluency\": true,\n  \"fluency_explanation\": \"The translation reads very naturally and fluently in Filipino. The word order and grammatical structure, 'Mabisang kinikilala ng algoritmo ang mga pattern...', are idiomatic and common in Filipino.\",\n  \"coherence\": true,\n  \"coherence_explanation\": \"The translation is logically coherent and well-structured, directly mirroring the simple structure of the source sentence. It is easy to understand and flows smoothly as a single thought.\",\n  \"cultural_appropriateness\": true,\n  \"cultural_appropriateness_explanation\": \"The content is technical and universal, and the language used is standard Filipino. There are no elements within the translation that are culturally inappropriate or insensitive to the Philippine context.\",\n  \"guideline_adherence\": true,\n  \"guideline_adherence_explanation\": \"The translation adheres to proper Filipino translation guidelines by using appropriate vocabulary, correct grammar, and natural sentence construction. It also properly integrates loanwords like 'algoritmo' and 'dataset' into the Filipino grammatical structure.\",\n  \"completeness\": true,\n  \"completeness_explanation\": \"The translation is complete, with no omissions of information present in the source text. It also does not introduce any unnecessary additions, maintaining conciseness.\",\n  \"thought_summary\": \"The translation is excellent across all criteria. It is semantically accurate, reads naturally and fluently, is coherent, culturally appropriate, adheres to translation guidelines, and is complete without any omissions or additions. It effectively conveys the technical meaning in clear and idiomatic Filipino.\"\n}"
+    },
+    "final_score": {
+      "score": 5,
+      "label": "Excellent",
+      "color": "success",
+      "true_count": 6,
+      "total_criteria": 6
+    },
+    "evaluation_metadata": {
+      "csv_row": 3,
+      "expected_good_translation": true,
+      "llm_pass": true,
+      "use_agentic": false,
+      "run_id": 2,
+      "run_total": 3,
+      "base_eval_id": "validation_set_row3_gemini-2-5-flash_prompt",
+      "unique_eval_id": "validation_set_row3_gemini-2-5-flash_prompt_run2",
+      "human_score": 3,
+      "has_human_scores": true,
+      "evaluation_parameters": {
+        "row_start": 1,
+        "row_end": 3,
+        "llm_model": "gemini-2.5-flash",
+        "use_agentic": false,
+        "reruns": 2
+      }
+    },
+    "metadata": {
+      "app_version": "1.0",
+      "filename": "auto_eval_20250729_120146_3_run2.json",
+      "saved_at": "2025-07-29T12:02:46.689658"
+    }
+  }
+]

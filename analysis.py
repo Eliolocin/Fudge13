@@ -101,7 +101,7 @@ class LLMJudgeAnalyzer:
         - eval_*_params.json: Individual evaluation results
         - eval_summary_*.json: Session summary statistics
         """
-        print(f"🔍 Scanning {self.evaluation_results_dir} for evaluation sessions...")
+        print(f"[INFO] Scanning {self.evaluation_results_dir} for evaluation sessions...")
         
         if not self.evaluation_results_dir.exists():
             raise FileNotFoundError(f"Evaluation results directory not found: {self.evaluation_results_dir}")
@@ -111,10 +111,10 @@ class LLMJudgeAnalyzer:
                        if d.is_dir() and d.name.startswith("session_")]
         
         if not session_dirs:
-            print("⚠️  No evaluation session directories found")
+            print("[WARNING] No evaluation session directories found")
             return
             
-        print(f"📂 Found {len(session_dirs)} evaluation sessions")
+        print(f"[INFO] Found {len(session_dirs)} evaluation sessions")
         
         # 2. Load evaluation results from each session
         total_evaluations = 0
@@ -149,9 +149,9 @@ class LLMJudgeAnalyzer:
                         summary_data['session_dir'] = str(session_dir)
                         self.session_summaries.append(summary_data)
                 except (json.JSONDecodeError, FileNotFoundError) as e:
-                    print(f"   ⚠️  Error loading {summary_file}: {e}")
+                    print(f"   [WARNING] Error loading {summary_file}: {e}")
         
-        print(f"✅ Loaded {total_evaluations} total evaluations from {len(session_dirs)} sessions")
+        print(f"[SUCCESS] Loaded {total_evaluations} total evaluations from {len(session_dirs)} sessions")
         
     def calculate_classification_metrics(self) -> Dict[str, Any]:
         """
@@ -286,7 +286,7 @@ class LLMJudgeAnalyzer:
                 "p_value": round(p_value, 4),
                 "sample_size": len(llm_scores),
                 "significance_level": 0.05,
-                "is_significant": p_value < 0.05
+                "is_significant": bool(p_value < 0.05)
             },
             "descriptive_statistics": {
                 "llm_scores": {
@@ -431,7 +431,7 @@ class LLMJudgeAnalyzer:
         """
         Generate comprehensive analysis report combining all metrics
         """
-        print("📊 Calculating comprehensive analysis...")
+        print("[INFO] Calculating comprehensive analysis...")
         
         # Collect basic information
         total_evaluations = len(self.evaluation_data)
@@ -585,7 +585,7 @@ Examples:
         analyzer.load_all_evaluation_data()
         
         if not analyzer.evaluation_data:
-            print("❌ No evaluation data found. Run auto_evaluate.py first to generate evaluation results.")
+            print("[ERROR] No evaluation data found. Run auto_evaluate.py first to generate evaluation results.")
             return
         
         # Apply filters if specified
@@ -597,17 +597,17 @@ Examples:
                     item for item in analyzer.evaluation_data
                     if item.get('evaluation_metadata', {}).get('evaluation_parameters', {}).get('llm_model') == args.filter_model
                 ]
-                print(f"🔍 Filtered to model '{args.filter_model}': {len(analyzer.evaluation_data)} evaluations")
+                print(f"[INFO] Filtered to model '{args.filter_model}': {len(analyzer.evaluation_data)} evaluations")
             
             if args.filter_session:
                 analyzer.evaluation_data = [
                     item for item in analyzer.evaluation_data
                     if item.get('session_name') == args.filter_session
                 ]
-                print(f"🔍 Filtered to session '{args.filter_session}': {len(analyzer.evaluation_data)} evaluations")
+                print(f"[INFO] Filtered to session '{args.filter_session}': {len(analyzer.evaluation_data)} evaluations")
             
             if not analyzer.evaluation_data:
-                print("❌ No evaluation data remaining after filtering.")
+                print("[ERROR] No evaluation data remaining after filtering.")
                 return
         
         # Generate analysis
@@ -622,23 +622,37 @@ Examples:
         output_filename = f"llm_judge_analysis_{timestamp}.json"
         output_path = output_dir / output_filename
         
+        # Convert numpy types to JSON-safe types
+        def convert_numpy_types(obj):
+            """Recursively convert numpy types to native Python types for JSON serialization"""
+            if hasattr(obj, 'item'):  # numpy scalar
+                return obj.item()
+            elif isinstance(obj, dict):
+                return {key: convert_numpy_types(value) for key, value in obj.items()}
+            elif isinstance(obj, list):
+                return [convert_numpy_types(item) for item in obj]
+            else:
+                return obj
+        
+        analysis_results_safe = convert_numpy_types(analysis_results)
+        
         # Save results
         with open(output_path, 'w', encoding='utf-8') as f:
-            json.dump(analysis_results, f, indent=2, ensure_ascii=False)
+            json.dump(analysis_results_safe, f, indent=2, ensure_ascii=False)
         
-        print(f"✅ Analysis complete! Results saved to: {output_path}")
+        print(f"[SUCCESS] Analysis complete! Results saved to: {output_path}")
         
         # Display summary
         if args.format == 'summary' or True:  # Always show summary
             print("\n" + "="*60)
-            print("📊 ANALYSIS SUMMARY")
+            print("[ANALYSIS SUMMARY]")
             print("="*60)
             
             # Basic info
             metadata = analysis_results.get("analysis_metadata", {})
-            print(f"🔍 Total Evaluations: {metadata.get('total_evaluations_analyzed', 0)}")
-            print(f"📁 Sessions Analyzed: {metadata.get('unique_sessions', 0)}")
-            print(f"🤖 Models Used: {', '.join(metadata.get('evaluation_parameters_summary', {}).get('models_used', []))}")
+            print(f"[INFO] Total Evaluations: {metadata.get('total_evaluations_analyzed', 0)}")
+            print(f"[INFO] Sessions Analyzed: {metadata.get('unique_sessions', 0)}")
+            print(f"[INFO] Models Used: {', '.join(metadata.get('evaluation_parameters_summary', {}).get('models_used', []))}")
             
             # Classification metrics
             classification = analysis_results.get("classification_metrics", {})
@@ -671,22 +685,22 @@ Examples:
             # Key insights
             insights = analysis_results.get("summary_insights", {})
             if insights.get("key_findings"):
-                print(f"\n💡 Key Findings:")
+                print(f"\n[KEY FINDINGS]:")
                 for finding in insights["key_findings"]:
-                    print(f"   • {finding}")
+                    print(f"   - {finding}")
             
             if insights.get("recommendations"):
-                print(f"\n🔧 Recommendations:")
+                print(f"\n[RECOMMENDATIONS]:")
                 for rec in insights["recommendations"]:
-                    print(f"   • {rec}")
+                    print(f"   - {rec}")
         
-        print(f"\n📄 Full detailed analysis available in: {output_path}")
+        print(f"\n[INFO] Full detailed analysis available in: {output_path}")
         
     except FileNotFoundError as e:
-        print(f"❌ Error: {e}")
+        print(f"[ERROR] Error: {e}")
         print("   Make sure you have run auto_evaluate.py to generate evaluation results first.")
     except Exception as e:
-        print(f"❌ Unexpected error: {e}")
+        print(f"[ERROR] Unexpected error: {e}")
         import traceback
         traceback.print_exc()
 

@@ -100,8 +100,20 @@ class AutoEvaluator:
         # Timestamp
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         
+        # Add prompt identifier if not default
+        prompt_file = self.config.get('prompt_file', 'prompts/basic_translation_judge.txt')
+        prompt_path = Path(prompt_file)
+        prompt_name = prompt_path.stem
+        if prompt_name != 'basic_translation_judge':
+            # Clean prompt name for filename safety
+            prompt_clean = prompt_name.replace('_', '-').replace(' ', '-')
+        else:
+            prompt_clean = None
+        
         # Build session ID components (translation_type removed in 3-column format)
         components = [csv_name, model_clean, mode]
+        if prompt_clean:
+            components.append(prompt_clean)
         
         # Add row range if specified
         row_start = self.config.get('row_start')
@@ -201,7 +213,7 @@ class AutoEvaluator:
     
     def _load_system_prompt(self) -> str:
         """Load system prompt from prompts directory."""
-        prompt_file = Path('prompts/basic_translation_judge.txt')
+        prompt_file = Path(self.config.get('prompt_file', 'prompts/basic_translation_judge.txt'))
         if not prompt_file.exists():
             raise FileNotFoundError(f"System prompt file not found: {prompt_file}")
         
@@ -647,6 +659,8 @@ Examples:
                        help='Output directory for results (default: evaluation_results)')
     parser.add_argument('--reruns', type=int, default=0,
                        help='Number of additional runs per evaluation (default: 0, meaning no reruns)')
+    parser.add_argument('--prompt_file', type=str, default='prompts/basic_translation_judge.txt',
+                       help='Path to prompt file (default: prompts/basic_translation_judge.txt)')
     
     return parser.parse_args()
 

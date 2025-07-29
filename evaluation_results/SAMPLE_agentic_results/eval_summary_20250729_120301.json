@@ -1,0 +1,79 @@
+{
+  "evaluation_summary": {
+    "total_evaluations": 9,
+    "unique_conditions": 3,
+    "runs_per_condition": 3,
+    "good_translations": {
+      "count": 9,
+      "passes": 9,
+      "pass_rate": 1.0
+    },
+    "bad_translations": {
+      "count": 0,
+      "passes": 0,
+      "pass_rate": 0
+    },
+    "overall_accuracy": 1.0,
+    "duration_minutes": 2.8698357000000003,
+    "config_used": {
+      "csv_file": "validation_set.csv",
+      "row_start": 1,
+      "row_end": 3,
+      "use_agentic": true,
+      "llm_model": "gemini-2.5-flash",
+      "output_dir": "evaluation_results",
+      "reruns": 2
+    }
+  },
+  "rerun_statistics": {
+    "unique_conditions_evaluated": 3,
+    "runs_per_condition": 3,
+    "consistency_analysis": {
+      "validation_set_row1_gemini-2-5-flash_agentic": {
+        "runs_completed": 3,
+        "scores": [
+          4,
+          3,
+          4
+        ],
+        "score_mean": 3.6666666666666665,
+        "score_std": 0.4714045207910317,
+        "pass_consistency": 1.0,
+        "score_range": [
+          3,
+          4
+        ]
+      },
+      "validation_set_row2_gemini-2-5-flash_agentic": {
+        "runs_completed": 3,
+        "scores": [
+          5,
+          5,
+          5
+        ],
+        "score_mean": 5.0,
+        "score_std": 0.0,
+        "pass_consistency": 1.0,
+        "score_range": [
+          5,
+          5
+        ]
+      },
+      "validation_set_row3_gemini-2-5-flash_agentic": {
+        "runs_completed": 3,
+        "scores": [
+          5,
+          5,
+          5
+        ],
+        "score_mean": 5.0,
+        "score_std": 0.0,
+        "pass_consistency": 1.0,
+        "score_range": [
+          5,
+          5
+        ]
+      }
+    }
+  }
+}

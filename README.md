@@ -133,6 +133,9 @@ python auto_evaluate.py --csv_file data.csv --use_agentic
 # Specify different LLM model
 python auto_evaluate.py --csv_file data.csv --llm_model gemini-2.5-pro
 
+# Use custom prompt file
+python auto_evaluate.py --csv_file data.csv --prompt_file prompts/alternative_judge.txt
+
 # Custom output directory
 python auto_evaluate.py --csv_file data.csv --output_dir my_results/
 
@@ -154,6 +157,12 @@ python auto_evaluate.py --csv_file dataset.csv \
 python auto_evaluate.py --csv_file dataset.csv \
                        --reruns 2 --use_agentic \
                        --row_end 10
+
+# Using custom prompt with specific model and reruns
+python auto_evaluate.py --csv_file dataset.csv \
+                       --prompt_file prompts/detailed_judge.txt \
+                       --llm_model gemini-2.5-pro \
+                       --reruns 2
 ```
 
 ### Evaluation Logic
@@ -185,7 +194,9 @@ evaluation_results/
     └── ...
 ```
 
-**Session Directory Naming**: `session_{csv_name}_{model}_{mode}_{additional_params}_{timestamp}`
+**Session Directory Naming**: `session_{csv_name}_{model}_{mode}_{prompt_name}_{additional_params}_{timestamp}`
+
+Note: `{prompt_name}` is only included if using a non-default prompt file (not `basic_translation_judge.txt`)
 
 ### Understanding Results
 
