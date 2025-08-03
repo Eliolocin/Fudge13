@@ -1,0 +1,889 @@
+{
+  "evaluation_summary": {
+    "total_evaluations": 171,
+    "unique_conditions": 57,
+    "runs_per_condition": 3,
+    "good_translations": {
+      "count": 129,
+      "passes": 114,
+      "pass_rate": 0.8837209302325582
+    },
+    "bad_translations": {
+      "count": 42,
+      "passes": 12,
+      "pass_rate": 0.2857142857142857
+    },
+    "overall_accuracy": 0.7368421052631579,
+    "duration_minutes": 22.757482666666665,
+    "config_used": {
+      "csv_file": "validation_set.csv",
+      "row_start": 1,
+      "row_end": null,
+      "use_agentic": false,
+      "llm_model": "gemini-2.5-flash",
+      "output_dir": "evaluation_results",
+      "reruns": 2
+    }
+  },
+  "rerun_statistics": {
+    "unique_conditions_evaluated": 57,
+    "runs_per_condition": 3,
+    "consistency_analysis": {
+      "validation_set_row1_gemini-2-5-flash_prompt": {
+        "runs_completed": 3,
+        "scores": [
+          3,
+          3,
+          4
+        ],
+        "score_mean": 3.3333333333333335,
+        "score_std": 0.4714045207910317,
+        "pass_consistency": 1.0,
+        "score_range": [
+          3,
+          4
+        ]
+      },
+      "validation_set_row2_gemini-2-5-flash_prompt": {
+        "runs_completed": 3,
+        "scores": [
+          5,
+          5,
+          5
+        ],
+        "score_mean": 5.0,
+        "score_std": 0.0,
+        "pass_consistency": 1.0,
+        "score_range": [
+          5,
+          5
+        ]
+      },
+      "validation_set_row3_gemini-2-5-flash_prompt": {
+        "runs_completed": 3,
+        "scores": [
+          5,
+          5,
+          5
+        ],
+        "score_mean": 5.0,
+        "score_std": 0.0,
+        "pass_consistency": 1.0,
+        "score_range": [
+          5,
+          5
+        ]
+      },
+      "validation_set_row4_gemini-2-5-flash_prompt": {
+        "runs_completed": 3,
+        "scores": [
+          1,
+          2,
+          1
+        ],
+        "score_mean": 1.3333333333333333,
+        "score_std": 0.4714045207910317,
+        "pass_consistency": 0.0,
+        "score_range": [
+          1,
+          2
+        ]
+      },
+      "validation_set_row5_gemini-2-5-flash_prompt": {
+        "runs_completed": 3,
+        "scores": [
+          2,
+          2,
+          4
+        ],
+        "score_mean": 2.6666666666666665,
+        "score_std": 0.9428090415820634,
+        "pass_consistency": 0.3333333333333333,
+        "score_range": [
+          2,
+          4
+        ]
+      },
+      "validation_set_row6_gemini-2-5-flash_prompt": {
+        "runs_completed": 3,
+        "scores": [
+          1,
+          1,
+          1
+        ],
+        "score_mean": 1.0,
+        "score_std": 0.0,
+        "pass_consistency": 1.0,
+        "score_range": [
+          1,
+          1
+        ]
+      },
+      "validation_set_row7_gemini-2-5-flash_prompt": {
+        "runs_completed": 3,
+        "scores": [
+          5,
+          5,
+          4
+        ],
+        "score_mean": 4.666666666666667,
+        "score_std": 0.4714045207910317,
+        "pass_consistency": 1.0,
+        "score_range": [
+          4,
+          5
+        ]
+      },
+      "validation_set_row8_gemini-2-5-flash_prompt": {
+        "runs_completed": 3,
+        "scores": [
+          5,
+          5,
+          5
+        ],
+        "score_mean": 5.0,
+        "score_std": 0.0,
+        "pass_consistency": 1.0,
+        "score_range": [
+          5,
+          5
+        ]
+      },
+      "validation_set_row9_gemini-2-5-flash_prompt": {
+        "runs_completed": 3,
+        "scores": [
+          5,
+          5,
+          5
+        ],
+        "score_mean": 5.0,
+        "score_std": 0.0,
+        "pass_consistency": 1.0,
+        "score_range": [
+          5,
+          5
+        ]
+      },
+      "validation_set_row10_gemini-2-5-flash_prompt": {
+        "runs_completed": 3,
+        "scores": [
+          5,
+          5,
+          5
+        ],
+        "score_mean": 5.0,
+        "score_std": 0.0,
+        "pass_consistency": 1.0,
+        "score_range": [
+          5,
+          5
+        ]
+      },
+      "validation_set_row11_gemini-2-5-flash_prompt": {
+        "runs_completed": 3,
+        "scores": [
+          5,
+          5,
+          5
+        ],
+        "score_mean": 5.0,
+        "score_std": 0.0,
+        "pass_consistency": 1.0,
+        "score_range": [
+          5,
+          5
+        ]
+      },
+      "validation_set_row12_gemini-2-5-flash_prompt": {
+        "runs_completed": 3,
+        "scores": [
+          1,
+          1,
+          1
+        ],
+        "score_mean": 1.0,
+        "score_std": 0.0,
+        "pass_consistency": 0.0,
+        "score_range": [
+          1,
+          1
+        ]
+      },
+      "validation_set_row13_gemini-2-5-flash_prompt": {
+        "runs_completed": 3,
+        "scores": [
+          5,
+          5,
+          5
+        ],
+        "score_mean": 5.0,
+        "score_std": 0.0,
+        "pass_consistency": 1.0,
+        "score_range": [
+          5,
+          5
+        ]
+      },
+      "validation_set_row14_gemini-2-5-flash_prompt": {
+        "runs_completed": 3,
+        "scores": [
+          2,
+          1,
+          1
+        ],
+        "score_mean": 1.3333333333333333,
+        "score_std": 0.4714045207910317,
+        "pass_consistency": 1.0,
+        "score_range": [
+          1,
+          2
+        ]
+      },
+      "validation_set_row15_gemini-2-5-flash_prompt": {
+        "runs_completed": 3,
+        "scores": [
+          4,
+          4,
+          4
+        ],
+        "score_mean": 4.0,
+        "score_std": 0.0,
+        "pass_consistency": 0.0,
+        "score_range": [
+          4,
+          4
+        ]
+      },
+      "validation_set_row16_gemini-2-5-flash_prompt": {
+        "runs_completed": 3,
+        "scores": [
+          2,
+          2,
+          4
+        ],
+        "score_mean": 2.6666666666666665,
+        "score_std": 0.9428090415820634,
+        "pass_consistency": 0.6666666666666666,
+        "score_range": [
+          2,
+          4
+        ]
+      },
+      "validation_set_row17_gemini-2-5-flash_prompt": {
+        "runs_completed": 3,
+        "scores": [
+          2,
+          3,
+          2
+        ],
+        "score_mean": 2.3333333333333335,
+        "score_std": 0.4714045207910317,
+        "pass_consistency": 0.6666666666666666,
+        "score_range": [
+          2,
+          3
+        ]
+      },
+      "validation_set_row18_gemini-2-5-flash_prompt": {
+        "runs_completed": 3,
+        "scores": [
+          5,
+          5,
+          5
+        ],
+        "score_mean": 5.0,
+        "score_std": 0.0,
+        "pass_consistency": 1.0,
+        "score_range": [
+          5,
+          5
+        ]
+      },
+      "validation_set_row19_gemini-2-5-flash_prompt": {
+        "runs_completed": 3,
+        "scores": [
+          5,
+          5,
+          5
+        ],
+        "score_mean": 5.0,
+        "score_std": 0.0,
+        "pass_consistency": 1.0,
+        "score_range": [
+          5,
+          5
+        ]
+      },
+      "validation_set_row20_gemini-2-5-flash_prompt": {
+        "runs_completed": 3,
+        "scores": [
+          2,
+          2,
+          3
+        ],
+        "score_mean": 2.3333333333333335,
+        "score_std": 0.4714045207910317,
+        "pass_consistency": 0.6666666666666666,
+        "score_range": [
+          2,
+          3
+        ]
+      },
+      "validation_set_row21_gemini-2-5-flash_prompt": {
+        "runs_completed": 3,
+        "scores": [
+          5,
+          5,
+          5
+        ],
+        "score_mean": 5.0,
+        "score_std": 0.0,
+        "pass_consistency": 0.0,
+        "score_range": [
+          5,
+          5
+        ]
+      },
+      "validation_set_row22_gemini-2-5-flash_prompt": {
+        "runs_completed": 3,
+        "scores": [
+          4,
+          4,
+          5
+        ],
+        "score_mean": 4.333333333333333,
+        "score_std": 0.4714045207910317,
+        "pass_consistency": 1.0,
+        "score_range": [
+          4,
+          5
+        ]
+      },
+      "validation_set_row23_gemini-2-5-flash_prompt": {
+        "runs_completed": 3,
+        "scores": [
+          5,
+          4,
+          4
+        ],
+        "score_mean": 4.333333333333333,
+        "score_std": 0.4714045207910317,
+        "pass_consistency": 0.0,
+        "score_range": [
+          4,
+          5
+        ]
+      },
+      "validation_set_row24_gemini-2-5-flash_prompt": {
+        "runs_completed": 3,
+        "scores": [
+          5,
+          4,
+          4
+        ],
+        "score_mean": 4.333333333333333,
+        "score_std": 0.4714045207910317,
+        "pass_consistency": 0.0,
+        "score_range": [
+          4,
+          5
+        ]
+      },
+      "validation_set_row25_gemini-2-5-flash_prompt": {
+        "runs_completed": 3,
+        "scores": [
+          2,
+          2,
+          3
+        ],
+        "score_mean": 2.3333333333333335,
+        "score_std": 0.4714045207910317,
+        "pass_consistency": 0.3333333333333333,
+        "score_range": [
+          2,
+          3
+        ]
+      },
+      "validation_set_row26_gemini-2-5-flash_prompt": {
+        "runs_completed": 3,
+        "scores": [
+          5,
+          5,
+          5
+        ],
+        "score_mean": 5.0,
+        "score_std": 0.0,
+        "pass_consistency": 0.0,
+        "score_range": [
+          5,
+          5
+        ]
+      },
+      "validation_set_row27_gemini-2-5-flash_prompt": {
+        "runs_completed": 3,
+        "scores": [
+          5,
+          5,
+          5
+        ],
+        "score_mean": 5.0,
+        "score_std": 0.0,
+        "pass_consistency": 1.0,
+        "score_range": [
+          5,
+          5
+        ]
+      },
+      "validation_set_row28_gemini-2-5-flash_prompt": {
+        "runs_completed": 3,
+        "scores": [
+          3,
+          5,
+          5
+        ],
+        "score_mean": 4.333333333333333,
+        "score_std": 0.9428090415820634,
+        "pass_consistency": 1.0,
+        "score_range": [
+          3,
+          5
+        ]
+      },
+      "validation_set_row29_gemini-2-5-flash_prompt": {
+        "runs_completed": 3,
+        "scores": [
+          5,
+          5,
+          5
+        ],
+        "score_mean": 5.0,
+        "score_std": 0.0,
+        "pass_consistency": 1.0,
+        "score_range": [
+          5,
+          5
+        ]
+      },
+      "validation_set_row30_gemini-2-5-flash_prompt": {
+        "runs_completed": 3,
+        "scores": [
+          5,
+          5,
+          5
+        ],
+        "score_mean": 5.0,
+        "score_std": 0.0,
+        "pass_consistency": 1.0,
+        "score_range": [
+          5,
+          5
+        ]
+      },
+      "validation_set_row31_gemini-2-5-flash_prompt": {
+        "runs_completed": 3,
+        "scores": [
+          5,
+          5,
+          5
+        ],
+        "score_mean": 5.0,
+        "score_std": 0.0,
+        "pass_consistency": 1.0,
+        "score_range": [
+          5,
+          5
+        ]
+      },
+      "validation_set_row32_gemini-2-5-flash_prompt": {
+        "runs_completed": 3,
+        "scores": [
+          5,
+          5,
+          5
+        ],
+        "score_mean": 5.0,
+        "score_std": 0.0,
+        "pass_consistency": 0.0,
+        "score_range": [
+          5,
+          5
+        ]
+      },
+      "validation_set_row33_gemini-2-5-flash_prompt": {
+        "runs_completed": 3,
+        "scores": [
+          5,
+          5,
+          5
+        ],
+        "score_mean": 5.0,
+        "score_std": 0.0,
+        "pass_consistency": 1.0,
+        "score_range": [
+          5,
+          5
+        ]
+      },
+      "validation_set_row34_gemini-2-5-flash_prompt": {
+        "runs_completed": 3,
+        "scores": [
+          4,
+          5,
+          3
+        ],
+        "score_mean": 4.0,
+        "score_std": 0.816496580927726,
+        "pass_consistency": 1.0,
+        "score_range": [
+          3,
+          5
+        ]
+      },
+      "validation_set_row35_gemini-2-5-flash_prompt": {
+        "runs_completed": 3,
+        "scores": [
+          5,
+          4,
+          4
+        ],
+        "score_mean": 4.333333333333333,
+        "score_std": 0.4714045207910317,
+        "pass_consistency": 1.0,
+        "score_range": [
+          4,
+          5
+        ]
+      },
+      "validation_set_row36_gemini-2-5-flash_prompt": {
+        "runs_completed": 3,
+        "scores": [
+          3,
+          3,
+          3
+        ],
+        "score_mean": 3.0,
+        "score_std": 0.0,
+        "pass_consistency": 1.0,
+        "score_range": [
+          3,
+          3
+        ]
+      },
+      "validation_set_row37_gemini-2-5-flash_prompt": {
+        "runs_completed": 3,
+        "scores": [
+          5,
+          5,
+          5
+        ],
+        "score_mean": 5.0,
+        "score_std": 0.0,
+        "pass_consistency": 1.0,
+        "score_range": [
+          5,
+          5
+        ]
+      },
+      "validation_set_row38_gemini-2-5-flash_prompt": {
+        "runs_completed": 3,
+        "scores": [
+          5,
+          5,
+          5
+        ],
+        "score_mean": 5.0,
+        "score_std": 0.0,
+        "pass_consistency": 1.0,
+        "score_range": [
+          5,
+          5
+        ]
+      },
+      "validation_set_row39_gemini-2-5-flash_prompt": {
+        "runs_completed": 3,
+        "scores": [
+          3,
+          2,
+          4
+        ],
+        "score_mean": 3.0,
+        "score_std": 0.816496580927726,
+        "pass_consistency": 0.6666666666666666,
+        "score_range": [
+          2,
+          4
+        ]
+      },
+      "validation_set_row40_gemini-2-5-flash_prompt": {
+        "runs_completed": 3,
+        "scores": [
+          5,
+          5,
+          5
+        ],
+        "score_mean": 5.0,
+        "score_std": 0.0,
+        "pass_consistency": 1.0,
+        "score_range": [
+          5,
+          5
+        ]
+      },
+      "validation_set_row41_gemini-2-5-flash_prompt": {
+        "runs_completed": 3,
+        "scores": [
+          5,
+          5,
+          5
+        ],
+        "score_mean": 5.0,
+        "score_std": 0.0,
+        "pass_consistency": 1.0,
+        "score_range": [
+          5,
+          5
+        ]
+      },
+      "validation_set_row42_gemini-2-5-flash_prompt": {
+        "runs_completed": 3,
+        "scores": [
+          4,
+          5,
+          4
+        ],
+        "score_mean": 4.333333333333333,
+        "score_std": 0.4714045207910317,
+        "pass_consistency": 0.0,
+        "score_range": [
+          4,
+          5
+        ]
+      },
+      "validation_set_row43_gemini-2-5-flash_prompt": {
+        "runs_completed": 3,
+        "scores": [
+          5,
+          5,
+          5
+        ],
+        "score_mean": 5.0,
+        "score_std": 0.0,
+        "pass_consistency": 1.0,
+        "score_range": [
+          5,
+          5
+        ]
+      },
+      "validation_set_row44_gemini-2-5-flash_prompt": {
+        "runs_completed": 3,
+        "scores": [
+          3,
+          2,
+          3
+        ],
+        "score_mean": 2.6666666666666665,
+        "score_std": 0.4714045207910317,
+        "pass_consistency": 0.6666666666666666,
+        "score_range": [
+          2,
+          3
+        ]
+      },
+      "validation_set_row45_gemini-2-5-flash_prompt": {
+        "runs_completed": 3,
+        "scores": [
+          5,
+          5,
+          5
+        ],
+        "score_mean": 5.0,
+        "score_std": 0.0,
+        "pass_consistency": 1.0,
+        "score_range": [
+          5,
+          5
+        ]
+      },
+      "validation_set_row46_gemini-2-5-flash_prompt": {
+        "runs_completed": 3,
+        "scores": [
+          5,
+          5,
+          4
+        ],
+        "score_mean": 4.666666666666667,
+        "score_std": 0.4714045207910317,
+        "pass_consistency": 1.0,
+        "score_range": [
+          4,
+          5
+        ]
+      },
+      "validation_set_row47_gemini-2-5-flash_prompt": {
+        "runs_completed": 3,
+        "scores": [
+          5,
+          4,
+          4
+        ],
+        "score_mean": 4.333333333333333,
+        "score_std": 0.4714045207910317,
+        "pass_consistency": 1.0,
+        "score_range": [
+          4,
+          5
+        ]
+      },
+      "validation_set_row48_gemini-2-5-flash_prompt": {
+        "runs_completed": 3,
+        "scores": [
+          5,
+          5,
+          5
+        ],
+        "score_mean": 5.0,
+        "score_std": 0.0,
+        "pass_consistency": 1.0,
+        "score_range": [
+          5,
+          5
+        ]
+      },
+      "validation_set_row49_gemini-2-5-flash_prompt": {
+        "runs_completed": 3,
+        "scores": [
+          2,
+          2,
+          2
+        ],
+        "score_mean": 2.0,
+        "score_std": 0.0,
+        "pass_consistency": 0.0,
+        "score_range": [
+          2,
+          2
+        ]
+      },
+      "validation_set_row50_gemini-2-5-flash_prompt": {
+        "runs_completed": 3,
+        "scores": [
+          5,
+          4,
+          4
+        ],
+        "score_mean": 4.333333333333333,
+        "score_std": 0.4714045207910317,
+        "pass_consistency": 1.0,
+        "score_range": [
+          4,
+          5
+        ]
+      },
+      "validation_set_row51_gemini-2-5-flash_prompt": {
+        "runs_completed": 3,
+        "scores": [
+          5,
+          5,
+          4
+        ],
+        "score_mean": 4.666666666666667,
+        "score_std": 0.4714045207910317,
+        "pass_consistency": 1.0,
+        "score_range": [
+          4,
+          5
+        ]
+      },
+      "validation_set_row52_gemini-2-5-flash_prompt": {
+        "runs_completed": 3,
+        "scores": [
+          5,
+          4,
+          5
+        ],
+        "score_mean": 4.666666666666667,
+        "score_std": 0.4714045207910317,
+        "pass_consistency": 1.0,
+        "score_range": [
+          4,
+          5
+        ]
+      },
+      "validation_set_row53_gemini-2-5-flash_prompt": {
+        "runs_completed": 3,
+        "scores": [
+          5,
+          5,
+          4
+        ],
+        "score_mean": 4.666666666666667,
+        "score_std": 0.4714045207910317,
+        "pass_consistency": 0.0,
+        "score_range": [
+          4,
+          5
+        ]
+      },
+      "validation_set_row54_gemini-2-5-flash_prompt": {
+        "runs_completed": 3,
+        "scores": [
+          3,
+          4,
+          3
+        ],
+        "score_mean": 3.3333333333333335,
+        "score_std": 0.4714045207910317,
+        "pass_consistency": 0.0,
+        "score_range": [
+          3,
+          4
+        ]
+      },
+      "validation_set_row55_gemini-2-5-flash_prompt": {
+        "runs_completed": 3,
+        "scores": [
+          5,
+          5,
+          5
+        ],
+        "score_mean": 5.0,
+        "score_std": 0.0,
+        "pass_consistency": 1.0,
+        "score_range": [
+          5,
+          5
+        ]
+      },
+      "validation_set_row56_gemini-2-5-flash_prompt": {
+        "runs_completed": 3,
+        "scores": [
+          3,
+          5,
+          4
+        ],
+        "score_mean": 4.0,
+        "score_std": 0.816496580927726,
+        "pass_consistency": 1.0,
+        "score_range": [
+          3,
+          5
+        ]
+      },
+      "validation_set_row57_gemini-2-5-flash_prompt": {
+        "runs_completed": 3,
+        "scores": [
+          5,
+          5,
+          5
+        ],
+        "score_mean": 5.0,
+        "score_std": 0.0,
+        "pass_consistency": 1.0,
+        "score_range": [
+          5,
+          5
+        ]
+      }
+    }
+  }
+}
