@@ -1,5 +1,147 @@
 // Main JavaScript for LLM-as-Judge Translation Interface
 
+class ProgressManager {
+    constructor(button) {
+        this.button = button;
+        this.progressFill = button.querySelector('.progress-fill');
+        this.progressPercentage = button.querySelector('.progress-percentage');
+        this.progressMessage = button.querySelector('.progress-message');
+        
+        this.currentStep = 0;
+        this.progress = 0;
+        this.interval = null;
+        this.isCompleted = false;
+        
+        // Progress step definitions
+        this.nonAgenticSteps = [
+            { message: "Sending Judge Request...", duration: 1000, endProgress: 15 },
+            { message: "Waiting for LLM Response...", duration: 6000, endProgress: 85 },
+            { message: "Processing Results...", duration: 1000, endProgress: 100 }
+        ];
+        
+        this.agenticSteps = [
+            { message: "Sending Judge Request...", duration: 2000, endProgress: 5 },
+            { message: "Initializing Agentic Judge...", duration: 4000, endProgress: 15 },
+            { message: "Analyzing Translation Quality...", duration: 8000, endProgress: 40 },
+            { message: "Conducting Research & Validation...", duration: 12000, endProgress: 70 },
+            { message: "Processing Research Findings...", duration: 8000, endProgress: 85 },
+            { message: "Generating Final Judgment...", duration: 4000, endProgress: 95 },
+            { message: "Finalizing Results...", duration: 2000, endProgress: 100 }
+        ];
+    }
+    
+    start(isAgentic = false) {
+        // Reset state
+        this.currentStep = 0;
+        this.progress = 0;
+        this.isCompleted = false;
+        
+        // Choose step definition based on mode
+        this.steps = isAgentic ? this.agenticSteps : this.nonAgenticSteps;
+        
+        // Show progress UI
+        this.button.classList.remove('loading');
+        this.button.classList.add('progress');
+        this.button.disabled = true;
+        
+        // Start first step
+        this.executeStep();
+    }
+    
+    executeStep() {
+        if (this.currentStep >= this.steps.length || this.isCompleted) {
+            return;
+        }
+        
+        const step = this.steps[this.currentStep];
+        const startProgress = this.currentStep === 0 ? 0 : this.steps[this.currentStep - 1].endProgress;
+        const progressDiff = step.endProgress - startProgress;
+        
+        // Update message
+        this.progressMessage.textContent = step.message;
+        
+        // Animate progress bar
+        const stepDuration = step.duration;
+        const updateInterval = 50; // Update every 50ms for smooth animation
+        const totalUpdates = stepDuration / updateInterval;
+        const progressIncrement = progressDiff / totalUpdates;
+        
+        let updates = 0;
+        this.interval = setInterval(() => {
+            if (this.isCompleted) {
+                clearInterval(this.interval);
+                return;
+            }
+            
+            updates++;
+            const stepProgress = Math.min(progressIncrement * updates, progressDiff);
+            this.progress = startProgress + stepProgress;
+            
+            this.updateUI();
+            
+            if (updates >= totalUpdates) {
+                clearInterval(this.interval);
+                this.currentStep++;
+                
+                // Small delay before next step for better UX
+                setTimeout(() => {
+                    if (!this.isCompleted) {
+                        this.executeStep();
+                    }
+                }, 100);
+            }
+        }, updateInterval);
+    }
+    
+    updateUI() {
+        const roundedProgress = Math.round(this.progress);
+        this.progressFill.style.width = `${roundedProgress}%`;
+        this.progressPercentage.textContent = `${roundedProgress}%`;
+    }
+    
+    complete() {
+        this.isCompleted = true;
+        
+        if (this.interval) {
+            clearInterval(this.interval);
+        }
+        
+        // Ensure we reach 100%
+        this.progress = 100;
+        this.progressMessage.textContent = "Complete!";
+        this.updateUI();
+        
+        // Brief delay to show completion, then hide progress
+        setTimeout(() => {
+            this.hide();
+        }, 500);
+    }
+    
+    hide() {
+        this.button.classList.remove('progress', 'loading');
+        this.button.disabled = false;
+        
+        if (this.interval) {
+            clearInterval(this.interval);
+        }
+    }
+    
+    // Handle error state
+    error(message = "Error occurred") {
+        this.isCompleted = true;
+        
+        if (this.interval) {
+            clearInterval(this.interval);
+        }
+        
+        this.progressMessage.textContent = message;
+        
+        setTimeout(() => {
+            this.hide();
+        }, 2000);
+    }
+}
+
 class LLMJudgeApp {    constructor() {
         this.initializeElements();
         this.bindEvents();
@@ -26,6 +168,9 @@ class LLMJudgeApp {    constructor() {
         this.filTranslation = document.getElementById('fil-translation');
         this.refTranslation = document.getElementById('ref-translation');
         this.judgeBtn = document.getElementById('judge-btn');
+        
+        // Initialize progress manager
+        this.progressManager = new ProgressManager(this.judgeBtn);
 
         // Results elements
         this.resultsContainer = document.getElementById('results-container');
@@ -381,28 +526,34 @@ class LLMJudgeApp {    constructor() {
             return;
         }
 
-        // Show loading state
-        this.setLoadingState(true);        try {
-            const requestData = {
-                system_prompt: this.systemPrompt.value,
-                source_text: this.sourceText.value,
-                fil_translation: this.filTranslation.value,
-                ref_translation: this.refTranslation.value,
-                llm_model: this.llmPicker.value,
-                llm_provider: this.llmPicker.selectedOptions[0].dataset.provider,
-                agentic_mode: this.agenticModeToggle.checked || false
-            };
+        const requestData = {
+            system_prompt: this.systemPrompt.value,
+            source_text: this.sourceText.value,
+            fil_translation: this.filTranslation.value,
+            ref_translation: this.refTranslation.value,
+            llm_model: this.llmPicker.value,
+            llm_provider: this.llmPicker.selectedOptions[0].dataset.provider,
+            agentic_mode: this.agenticModeToggle.checked || false
+        };
 
-            console.log('[DEBUG] Sending judge request:', requestData);
-            console.log('[DEBUG] Provider:', requestData.llm_provider, 'Model:', requestData.llm_model);
+        // Start smart progress indicator
+        const isAgentic = requestData.agentic_mode;
+        this.progressManager.start(isAgentic);
 
+        console.log('[DEBUG] Sending judge request:', requestData);
+        console.log('[DEBUG] Provider:', requestData.llm_provider, 'Model:', requestData.llm_model);
+        console.log('[DEBUG] Agentic mode:', isAgentic);
+
+        try {
             const response = await fetch('/api/judge', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(requestData)
-            });            const result = await response.json();
+            });
+
+            const result = await response.json();
             console.log('[DEBUG] Received response:', result);
             
             // Log the raw LLM response for debugging
@@ -411,15 +562,18 @@ class LLMJudgeApp {    constructor() {
             }
 
             if (response.ok) {
+                // Complete progress and show results
+                this.progressManager.complete();
                 this.displayResults(result);
             } else {
+                // Show error via progress manager
+                this.progressManager.error(result.error || 'Failed to judge translation');
                 this.showError(result.error || 'Failed to judge translation');
             }
         } catch (error) {
             console.error('[DEBUG] Error during judgment:', error);
+            this.progressManager.error('Network error occurred');
             this.showError('Network error occurred');
-        } finally {
-            this.setLoadingState(false);
         }
     }
 
@@ -565,11 +719,10 @@ class LLMJudgeApp {    constructor() {
                 <div class="metadata-item">
                     <strong>Prompt Length:</strong> ${metadata.prompt_length} characters
                 </div>
-                ${metadata.agentic_features ? `
+                ${this.getToolsUsedDisplay(result) ? `
                     <div class="metadata-item">
-                        <strong>Agentic Features:</strong> 
-                        ${metadata.agentic_features.google_search_enabled ? '<i class="fas fa-search"></i> Search' : ''}
-                        ${metadata.agentic_features.thought_summary_captured ? '<i class="fas fa-brain"></i> Thoughts' : ''}
+                        <strong>Tools Used:</strong> 
+                        ${this.getToolsUsedDisplay(result)}
                     </div>
                 ` : ''}
             </div>
@@ -577,7 +730,37 @@ class LLMJudgeApp {    constructor() {
         
         // Store current results for metric explanations
         this.currentResults = { judgment, final_score, metadata };
-    }    showMetricExplanation(metricName, explanation) {
+    }
+
+    getToolsUsedDisplay(result) {
+        if (!result.function_call_logs || result.function_call_logs.length === 0) {
+            return '';
+        }
+        
+        const toolsUsed = [];
+        
+        // Check for back translation usage
+        const backTranslationUsed = result.function_call_logs.some(log => 
+            log.function_name === 'execute_back_translation' && log.success
+        );
+        
+        // Check for search expert usage  
+        const searchUsed = result.function_call_logs.some(log => 
+            log.function_name === 'execute_search_expert' && log.success
+        );
+        
+        if (backTranslationUsed) {
+            toolsUsed.push('<i class="fas fa-exchange-alt"></i> Back Translation');
+        }
+        
+        if (searchUsed) {
+            toolsUsed.push('<i class="fas fa-search"></i> Search');
+        }
+        
+        return toolsUsed.join(' ');
+    }
+
+    showMetricExplanation(metricName, explanation) {
         // Decode HTML entities and line breaks
         const decodedExplanation = explanation
             .replace(/&quot;/g, '"')

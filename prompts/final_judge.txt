@@ -8,11 +8,11 @@ You are a Filipino translation expert for cartoon dubbing. Evaluate this English
 
 Rate these 6 aspects (True/False) with explanations:
 
-1. **Accuracy**: Does it convey the correct meaning?
-2. **Fluency**: Does it sound natural in Filipino?
-3. **Coherence**: Is it logically structured?
-4. **Cultural Appropriateness**: Does it retain the intended tone for a Filipino audience?
-5. **Guideline Adherence**: Has the same or similar duration when spoken?
-6. **Completeness**: Nothing missing or added?
+<pos>1. **Accuracy**: Does it convey the correct meaning?</pos>
+<pos>2. **Fluency**: Does it sound natural in Filipino?</pos>
+<pos>3. **Coherence**: Is it logically structured?</pos>
+<pos>4. **Cultural Appropriateness**: Does it retain the intended tone for a Filipino audience?</pos>
+<pos>5. **Guideline Adherence**: Has the same or similar duration when spoken?</pos>
+<pos>6. **Completeness**: Nothing missing or added?</pos>
 
 Provide detailed reasoning for each rating.

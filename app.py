@@ -1,11 +1,23 @@
-from flask import Flask, render_template, request, jsonify
+import warnings
 import os
+
+# Comprehensive warning suppression for clean console output
+warnings.filterwarnings("ignore", message="Field name .* shadows an attribute in parent", category=UserWarning)
+warnings.filterwarnings("ignore", message=".*shadows an attribute in parent.*", category=UserWarning)
+warnings.filterwarnings("ignore", category=UserWarning, module="pydantic")
+warnings.filterwarnings("ignore", category=UserWarning, module="google")
+
+# Additional warning suppression for werkzeug and flask
+warnings.filterwarnings("ignore", message=".*development server.*", category=UserWarning)
+warnings.filterwarnings("ignore", category=UserWarning, module="werkzeug")
+
+from flask import Flask, render_template, request, jsonify
 import json
 from datetime import datetime
 from dotenv import load_dotenv
 from llms.prompt_engineered_judge_main import create_llm_client
 from llms.agentic_judge_main import create_agentic_llm_client
-from utils.prompt_utils import replace_tokens, validate_tokens
+from utils.prompt_utils import replace_tokens, validate_tokens, randomize_positions
 from utils.eval_utils import calculate_final_score
 
 # Load environment variables
@@ -92,6 +104,9 @@ def judge_translation():
             fil_translation=fil_translation,
             ref_translation=ref_translation
         )
+        
+        # Randomize positions to reduce position bias
+        final_prompt = randomize_positions(final_prompt)
         
         print(f"[DEBUG] Final prompt length: {len(final_prompt)}")
         
@@ -191,8 +206,12 @@ def save_judgment_results(request_data, llm_response, final_score_data, raw_prom
                 "success": llm_response.get("success"),
                 "data": llm_response.get("data"),
                 "raw_response": llm_response.get("raw_response"),
+                "raw_agentic_response": llm_response.get("raw_agentic_response"),
+                "raw_structuring_response": llm_response.get("raw_structuring_response"),
                 "error": llm_response.get("error"),
-                "thought_summary": llm_response.get("thought_summary")
+                "thought_summary": llm_response.get("thought_summary"),
+                "function_call_logs": llm_response.get("function_call_logs", []),
+                "agentic_features": llm_response.get("agentic_features", {})
             },
             "final_score": final_score_data,
             "metadata": {
@@ -214,4 +233,22 @@ def save_judgment_results(request_data, llm_response, final_score_data, raw_prom
         return None
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    # Configure logging to reduce Flask verbosity
+    import logging
+    logging.getLogger('werkzeug').setLevel(logging.ERROR)
+    
+    # Run with reduced verbosity and no auto-reloader to prevent repeated warnings
+    print("LLM-as-Judge Translation Interface Starting...")
+    print("Local:   http://127.0.0.1:5000")
+    print("Network: http://192.168.1.7:5000") 
+    # print("Smart progress indicators enabled for both agentic and non-agentic modes")
+    print("Debug mode active - Press Ctrl+C to quit")
+    print("-" * 60)
+    
+    app.run(
+        debug=True,
+        host='0.0.0.0', 
+        port=5000,
+        use_reloader=False,  # Prevent auto-restart and repeated warnings
+        threaded=True       # Better performance for concurrent requests
+    )
