@@ -8,11 +8,23 @@ You are a Filipino translation expert for cartoon dubbing. Evaluate this English
 
 Rate these 6 aspects (True/False) with explanations:
 
-1. **Accuracy**: Does it convey the correct meaning? (ex. "Oh, sounds like he has a crush on you, boss." → "Naku, parang may gusto siya sa 'yo, bossing.")
-2. **Fluency**: Does it sound natural in Filipino? (ex. "This guy right here is Shadow, and he's kinda my biggest rival. He's also a real buzz-kill." → "Yang nakikita niyong iyan, siya si Shadow. Siya rin ang pinakahigpit kong karibal. At panira rin siya ng trip.")
-3. **Coherence**: Is it logically structured? (ex. "Forgive us for barging in. We did not know that this was your dwelling." → "Paumanhin sa pagpasok namin. Hindi namin alam na rito ang iyong tirahan.")
-4. **Cultural Appropriateness**: Does it retain the intended tone for a Filipino audience?( ex. "Hah! Get owned!" → "Hah! Mukha mo!")
-5. **Guideline Adherence**: Has the same or similar duration when spoken? (ex. "Every dream is a candle I must snuff out... I... am the darkness..." → "Lahat ng pangarap ay kandilang dapat kong patayin... Ako... ang kadiliman...")
-6. **Completeness**: Nothing missing or added in meaning? (ex. "But you got to be careful who you trip up. Can't be too sure about the Underworld these days." → "Pero mag-iingat ka sa mga kinakalaban mo. Wala nang kasiguruhan ang nasa mundong ilalim ngayon.")
+<pos>
+- **Accuracy**: Does it convey the correct meaning? (ex. "Oh, sounds like he has a crush on you, boss." → "Naku, parang may gusto siya sa 'yo, bossing.")
+</pos>
+<pos>
+- **Fluency**: Does it sound natural in Filipino? (ex. "This guy right here is Shadow, and he's kinda my biggest rival. He's also a real buzz-kill." → "Yang nakikita niyong iyan, siya si Shadow. Siya rin ang pinakahigpit kong karibal. At panira rin siya ng trip.")
+</pos>
+<pos>
+- **Coherence**: Is it logically structured? (ex. "Forgive us for barging in. We did not know that this was your dwelling." → "Paumanhin sa pagpasok namin. Hindi namin alam na rito ang iyong tirahan.")
+</pos>
+<pos>
+- **Cultural Appropriateness**: Does it retain the intended tone for a Filipino audience?( ex. "Hah! Get owned!" → "Hah! Mukha mo!")
+</pos>
+<pos>
+- **Guideline Adherence**: Has the same or similar duration when spoken? (ex. "Every dream is a candle I must snuff out... I... am the darkness..." → "Lahat ng pangarap ay kandilang dapat kong patayin... Ako... ang kadiliman...")
+</pos>
+<pos>
+- **Completeness**: Nothing missing or added in meaning? (ex. "But you got to be careful who you trip up. Can't be too sure about the Underworld these days." → "Pero mag-iingat ka sa mga kinakalaban mo. Wala nang kasiguruhan ang nasa mundong ilalim ngayon.")
+</pos>
 
 Provide detailed reasoning for each rating.
