@@ -139,7 +139,18 @@
                 </div><div class="section">
                     <button id="judge-btn" class="judge-button disabled">
                         <span class="btn-text">Judge Translation</span>
-                        <span class="btn-loading">Judging...</span>
+                        <div class="btn-progress-container">
+                            <div class="progress-content">
+                                <div class="progress-bar-wrapper">
+                                    <div class="progress-bar">
+                                        <div class="progress-fill"></div>
+                                    </div>
+                                    <span class="progress-percentage">0%</span>
+                                </div>
+                                <div class="progress-message">Preparing request...</div>
+                            </div>
+                        </div>
+                        <span class="btn-loading" style="display: none;">Judging...</span>
                     </button>
                     <div class="validation-summary error">
                         <i class="fas fa-exclamation-triangle"></i> Please fill in all required fields

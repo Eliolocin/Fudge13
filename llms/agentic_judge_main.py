@@ -1,8 +1,8 @@
-"""Agentic LLM client implementation with Google Search grounding and Thought Summaries"""
+"""Agentic LLM client implementation with native Gemini function calling using Python callables"""
 
 import os
 import json
-from typing import Dict, Any, Optional
+from typing import Dict, Any, Optional, List
 from pydantic import BaseModel
 from google import genai
 from utils.agent_utils import (
@@ -11,10 +11,10 @@ from utils.agent_utils import (
     extract_thought_summary, 
     is_agentic_model_supported,
     AGENTIC_SUPPORTED_MODELS,
-    STRUCTURING_MODEL
+    STRUCTURING_MODEL,
+    function_call_logger
 )
 from llms.prompt_engineered_judge_main import LLMClient, TranslationJudgment
-
 
 # Prompt template for converting unstructured agentic output to structured format
 STRUCTURING_PROMPT_TEMPLATE = """You are a data extraction assistant. Your task is to convert the unstructured translation judgment below into a structured JSON format.
@@ -48,12 +48,14 @@ INSTRUCTIONS:
 
 Output the JSON now:"""
 
-
 class AgenticGeminiClient(LLMClient):
     """
-    Agentic Google Gemini API client with enhanced capabilities:
+    Agentic Google Gemini API client with native function calling using Python callables.
+    
+    Features:
     - Google Search grounding for real-time information
     - Thought Summary capture for transparency
+    - Native function calling with Python callable functions
     - Structured output for translation judgment
     
     Only supports Gemini 2.5 models (gemini-2.5-pro, gemini-2.5-flash)
@@ -76,76 +78,103 @@ class AgenticGeminiClient(LLMClient):
     
     def generate_judgment(self, prompt: str) -> Dict[str, Any]:
         """
-        Generate structured translation judgment using two-step agentic process:
-        1. Agentic LLM call with Google Search grounding and thought summaries (unstructured output)
-        2. Structuring LLM call to convert unstructured output to structured format
+        Generate structured translation judgment using native Gemini function calling with Python callables.
         
-        This approach works around Gemini API limitations where tools and structured output
-        cannot be used simultaneously.
+        Process:
+        1. Agentic LLM call with Google Search, thought summaries, and Python callable function tools
+        2. Native function call handling using Gemini's built-in capabilities
+        3. Conversation management with function responses
+        4. Structuring LLM call to convert final output to structured format
+        
+        Args:
+            prompt (str): The evaluation prompt
+            
+        Returns:
+            Dict containing structured judgment results and metadata
         """
         print(f"[DEBUG] AgenticGeminiClient.generate_judgment called with prompt length: {len(prompt)}")
         print(f"[DEBUG] Prompt preview: {prompt[:100]}...")
-        print(f"[DEBUG] EXACT PROMPT SENT TO AGENTIC GEMINI: {repr(prompt)}")
         
         try:
-            # Step 1: Agentic LLM call with tools (unstructured output)
-            print("[DEBUG] Step 1: Calling Agentic Gemini API with Google Search grounding and thought summaries...")
+            # Clear any previous function call logs to start fresh
+            function_call_logger.clear_logs()
+            print("[DEBUG] Function call logger cleared for new evaluation")
             
+            # Step 1: Native function calling conversation with Python callables
+            print("[DEBUG] Step 1: Starting native function calling conversation with Python callables...")
+            
+            # Create agentic configuration with ONLY custom functions (no Google Search)
+            # Google Search is handled by separate sub-agent calls in execute_search_expert
             agentic_config = create_agentic_unstructured_config(
-                include_google_search=True,
-                include_thoughts=True
+                include_google_search=False,  # CRITICAL: No Google Search in main agent
+                include_thoughts=True,
+                include_custom_functions=True  # Only custom Python functions
             )
             
+            print("[DEBUG] Agentic configuration created with Python callable tools")
+            
+            # Generate content with tools enabled - Gemini will handle function calls automatically
             agentic_response = self.client.models.generate_content(
                 model=self.model_name,
                 contents=prompt,
                 config=agentic_config
             )
             
-            print(f"[DEBUG] Step 1: Agentic Gemini API response received")
+            print("[DEBUG] Agentic response received, capturing function call logs...")
             
-            # Extract thought summary and main content from agentic response
+            # Capture function call logs after the agentic response
+            captured_logs = function_call_logger.get_logs()
+            print(f"[DEBUG] Captured {len(captured_logs)} function call logs")
+            
+            # Extract thought summary and main content from response
             extracted = extract_thought_summary(agentic_response)
-            thought_summary = extracted["thought_summary"]
-            unstructured_content = extracted["main_content"]
-            has_thoughts = extracted["has_thoughts"]
+            thought_summary = extracted.get("thought_summary", "") or ""
+            unstructured_content = extracted.get("main_content", "") or ""
+            has_thoughts = extracted.get("has_thoughts", False)
             
-            print(f"[DEBUG] Step 1: Thought summary extracted: {has_thoughts}")
-            if has_thoughts:
-                print(f"[DEBUG] Step 1: Thought summary length: {len(thought_summary)}")
-                print(f"[DEBUG] Step 1: Thought summary preview: {thought_summary[:200]}...")
+            print(f"[DEBUG] Response: Thought summary captured: {has_thoughts}")
+            print(f"[DEBUG] Response: Content length: {len(unstructured_content)}")
             
-            print(f"[DEBUG] Step 1: Unstructured content length: {len(unstructured_content)}")
-            print(f"[DEBUG] Step 1: Unstructured content preview: {unstructured_content[:300]}...")
+            # Check if any function calls were made (this will be implicit with Python callables)
+            function_calls_detected = any(term in unstructured_content.lower() for term in [
+                "back-translation", "search", "research", "cultural", "semantic"
+            ])
+            
+            print(f"[DEBUG] Function usage detected in response: {function_calls_detected}")
             
             # Step 2: Structure the unstructured output
             print("[DEBUG] Step 2: Converting unstructured output to structured format...")
             structured_result = self._convert_to_structured(unstructured_content)
             
             if not structured_result["success"]:
-                print(f"[DEBUG] Step 2: Structuring failed: {structured_result['error']}")
+                print(f"[DEBUG] Step 2: Structuring failed: {structured_result.get('error', 'Unknown error')}")
                 return {
                     "success": False,
-                    "error": f"Structuring failed: {structured_result['error']}",
+                    "error": f"Structuring failed: {structured_result.get('error', 'Unknown error')}",
                     "raw_agentic_response": unstructured_content,
-                    "thought_summary": thought_summary if has_thoughts else None
+                    "thought_summary": thought_summary if has_thoughts else None,
+                    "function_call_logs": captured_logs
                 }
             
             print("[DEBUG] Step 2: Successfully converted to structured format")
             
             # Combine structured data with thought summary
-            judgment_data = structured_result["data"]
+            judgment_data = structured_result.get("data", {})
             
             return {
                 "success": True,
                 "data": judgment_data,
                 "raw_agentic_response": unstructured_content,
-                "raw_structuring_response": structured_result["raw_response"],
+                "raw_structuring_response": structured_result.get("raw_response", ""),
                 "thought_summary": thought_summary if has_thoughts else None,
+                "function_call_logs": captured_logs,
                 "agentic_features": {
-                    "google_search_enabled": True,
+                    "google_search_enabled": True,  # Via sub-agent calls
                     "thought_summary_captured": has_thoughts,
-                    "two_step_process": True,
+                    "custom_functions_available": True,
+                    "python_callable_functions": True,
+                    "two_layer_architecture": True,  # Main agent + search sub-agent
+                    "function_usage_detected": function_calls_detected,
                     "agentic_model": self.model_name,
                     "structuring_model": STRUCTURING_MODEL
                 }
@@ -153,17 +182,24 @@ class AgenticGeminiClient(LLMClient):
             
         except Exception as e:
             print(f"[DEBUG] Agentic Gemini API error: {str(e)}")
+            
+            # Try to capture any function call logs even in error case
+            try:
+                captured_logs = function_call_logger.get_logs()
+                print(f"[DEBUG] Captured {len(captured_logs)} function call logs during error")
+            except:
+                captured_logs = []
+                print("[DEBUG] Could not capture function call logs during error")
+            
             return {
                 "success": False,
-                "error": f"Agentic Gemini API error: {str(e)}"
+                "error": f"Agentic Gemini API error: {str(e)}",
+                "function_call_logs": captured_logs
             }
     
     def _convert_to_structured(self, unstructured_content: str) -> Dict[str, Any]:
         """
-        Private method to convert unstructured agentic output to structured format.
-        
-        Uses a separate LLM call with structured output (no tools) to extract
-        the 6 boolean criteria and explanations from the unstructured text.
+        Convert unstructured agentic output to structured format.
         
         Args:
             unstructured_content (str): Unstructured output from agentic LLM
@@ -217,13 +253,13 @@ class AgenticGeminiClient(LLMClient):
             print(f"[DEBUG] Structuring: Error: {str(e)}")
             return {
                 "success": False,
-                "error": f"Structuring error: {str(e)}"
+                "error": f"Structuring error: {str(e)}",
+                "raw_response": getattr(locals().get('structuring_response'), 'text', None) or ""
             }
-
 
 def create_agentic_llm_client(provider: str, model: str) -> Optional[LLMClient]:
     """
-    Factory function to create agentic LLM client.
+    Factory function to create agentic LLM client with Python callable functions.
     Currently only supports Google Gemini 2.5 models with agentic features.
     
     Args:
@@ -260,7 +296,7 @@ def create_agentic_llm_client(provider: str, model: str) -> Optional[LLMClient]:
         print("[DEBUG] No valid Google API key for agentic mode")
         raise ValueError("Agentic mode requires a valid Google API key")
     
-    print("[DEBUG] Valid Google API key found, creating AgenticGeminiClient")
+    print("[DEBUG] Valid Google API key found, creating AgenticGeminiClient with Python callables")
     try:
         return AgenticGeminiClient(api_key, model)
     except Exception as e:

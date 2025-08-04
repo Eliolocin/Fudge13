@@ -29,7 +29,7 @@ warnings.filterwarnings("ignore", message="Field name .* shadows an attribute in
 # Import existing components
 from llms.prompt_engineered_judge_main import create_llm_client, TranslationJudgment
 from llms.agentic_judge_main import create_agentic_llm_client
-from utils.prompt_utils import replace_tokens, validate_tokens
+from utils.prompt_utils import replace_tokens, validate_tokens, randomize_positions
 from utils.eval_utils import calculate_final_score
 
 
@@ -340,6 +340,9 @@ class AutoEvaluator:
             fil_translation=fil_translation.strip(),
             ref_translation=""  # No reference translation for this evaluation
         )
+        
+        # Randomize positions to reduce position bias
+        filled_prompt = randomize_positions(filled_prompt)
         
         # Attempt LLM evaluation with retry logic
         for attempt in range(self.max_retries + 1):
@@ -679,7 +682,8 @@ def main():
             'use_agentic': args.use_agentic,
             'llm_model': args.llm_model,
             'output_dir': args.output_dir,
-            'reruns': args.reruns
+            'reruns': args.reruns,
+            'prompt_file': args.prompt_file
         }
         
         # Initialize and run evaluation
