@@ -6,7 +6,7 @@ This document outlines the standardized testing procedure for evaluating LLM-as-
 
 - **File**: `validation_set.csv`
 - **Format**: 3-column CSV (Source Text (English), Target Text (Filipino), Final Score)
-- **Total Rows**: 58 translation pairs
+- **Total Rows**: 40 translation pairs for Western Animated Series
 - **Score Range**: 1-5 (human evaluation scores)
 - **Content**: Mix of conversational text, technical terms, cultural references, literary quotes, and idiomatic expressions
 
@@ -84,7 +84,7 @@ python auto_evaluate.py --csv_file validation_set.csv --llm_model gemini-2.5-fla
 Generate comprehensive analysis for the non-agentic results:
 
 ```bash
-python analysis.py --filter-model gemini-2.5-flash --output-dir analysis_results/non_agentic_analysis
+python analysis.py --filter-model gemini-2.5-flash --filter-session session_validation_set_gemini-2-5-flash_prompt --output-dir analysis_results/non_agentic_analysis
 ```
 
 **Output location**: `analysis_results/non_agentic_analysis/llm_judge_analysis_[TIMESTAMP].json`
