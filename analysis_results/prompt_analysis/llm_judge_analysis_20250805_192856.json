@@ -1,0 +1,255 @@
+{
+  "analysis_metadata": {
+    "generated_at": "2025-08-05T19:28:56.369183",
+    "analyzer_version": "1.0",
+    "total_evaluations_analyzed": 120,
+    "unique_sessions": 1,
+    "evaluation_parameters_summary": {
+      "models_used": [
+        "gemini-2.5-flash"
+      ],
+      "modes_used": [
+        "prompt"
+      ],
+      "csv_files_used": [
+        "validation"
+      ]
+    }
+  },
+  "classification_metrics": {
+    "confusion_matrix": {
+      "true_positive": 61,
+      "false_positive": 12,
+      "true_negative": 33,
+      "false_negative": 14,
+      "total_samples": 120
+    },
+    "metrics": {
+      "precision": 0.8356,
+      "recall": 0.8133,
+      "specificity": 0.7333,
+      "accuracy": 0.7833,
+      "f1_score": 0.8243
+    },
+    "interpretation": {
+      "precision": "Of translations LLM marked as good, 83.6% were actually good",
+      "recall": "Of actually good translations, LLM correctly identified 81.3%",
+      "accuracy": "LLM correctly classified 78.3% of all translations",
+      "f1_score": "Harmonic mean of precision and recall: 0.824"
+    }
+  },
+  "correlation_analysis": {
+    "correlation_analysis": {
+      "spearman_correlation": 0.0672,
+      "p_value": 1.8738,
+      "sample_size": 120,
+      "significance_level": 0.05,
+      "is_significant": false
+    },
+    "descriptive_statistics": {
+      "llm_scores": {
+        "mean": 3.61,
+        "std": 1.42,
+        "min": 1.0,
+        "max": 5.0
+      },
+      "human_scores": {
+        "mean": 3.38,
+        "std": 1.55,
+        "min": 1.0,
+        "max": 5.0
+      }
+    },
+    "interpretation": {
+      "correlation_strength": "Very Weak",
+      "direction": "positive",
+      "summary": "Weak positive correlation (r=0.067, p=1.874)"
+    },
+    "paired_data": [
+      {
+        "llm_score": 3,
+        "human_score": 4,
+        "csv_row": 1,
+        "translation_type": null,
+        "base_eval_id": "validation_set_row1_gemini-2-5-flash_prompt"
+      },
+      {
+        "llm_score": 2,
+        "human_score": 4,
+        "csv_row": 1,
+        "translation_type": null,
+        "base_eval_id": "validation_set_row1_gemini-2-5-flash_prompt"
+      },
+      {
+        "llm_score": 1,
+        "human_score": 4,
+        "csv_row": 1,
+        "translation_type": null,
+        "base_eval_id": "validation_set_row1_gemini-2-5-flash_prompt"
+      },
+      {
+        "llm_score": 3,
+        "human_score": 5,
+        "csv_row": 2,
+        "translation_type": null,
+        "base_eval_id": "validation_set_row2_gemini-2-5-flash_prompt"
+      },
+      {
+        "llm_score": 5,
+        "human_score": 5,
+        "csv_row": 2,
+        "translation_type": null,
+        "base_eval_id": "validation_set_row2_gemini-2-5-flash_prompt"
+      },
+      {
+        "llm_score": 4,
+        "human_score": 5,
+        "csv_row": 2,
+        "translation_type": null,
+        "base_eval_id": "validation_set_row2_gemini-2-5-flash_prompt"
+      },
+      {
+        "llm_score": 5,
+        "human_score": 5,
+        "csv_row": 3,
+        "translation_type": null,
+        "base_eval_id": "validation_set_row3_gemini-2-5-flash_prompt"
+      },
+      {
+        "llm_score": 5,
+        "human_score": 5,
+        "csv_row": 3,
+        "translation_type": null,
+        "base_eval_id": "validation_set_row3_gemini-2-5-flash_prompt"
+      },
+      {
+        "llm_score": 5,
+        "human_score": 5,
+        "csv_row": 3,
+        "translation_type": null,
+        "base_eval_id": "validation_set_row3_gemini-2-5-flash_prompt"
+      },
+      {
+        "llm_score": 1,
+        "human_score": 5,
+        "csv_row": 4,
+        "translation_type": null,
+        "base_eval_id": "validation_set_row4_gemini-2-5-flash_prompt"
+      }
+    ]
+  },
+  "variation_analysis": {
+    "variation_summary": {
+      "total_conditions_analyzed": 40,
+      "total_runs_analyzed": 120,
+      "average_runs_per_condition": 3.0,
+      "overall_pass_consistency": 0.933,
+      "overall_score_std": 0.628
+    },
+    "consistency_insights": {
+      "most_consistent_condition": {
+        "condition": "validation_set_row3_gemini-2-5-flash_prompt",
+        "score_std": 0.0,
+        "pass_consistency": 1.0
+      },
+      "least_consistent_condition": {
+        "condition": "validation_set_row10_gemini-2-5-flash_prompt",
+        "score_std": 1.528,
+        "pass_consistency": 0.667
+      }
+    },
+    "detailed_analysis": {
+      "validation_set_row1_gemini-2-5-flash_prompt": {
+        "runs_completed": 3,
+        "scores": [
+          3,
+          2,
+          1
+        ],
+        "score_mean": 2,
+        "score_std": 1.0,
+        "score_range": [
+          1,
+          3
+        ],
+        "pass_consistency": 0.667,
+        "coefficient_of_variation": 0.5
+      },
+      "validation_set_row2_gemini-2-5-flash_prompt": {
+        "runs_completed": 3,
+        "scores": [
+          3,
+          5,
+          4
+        ],
+        "score_mean": 4,
+        "score_std": 1.0,
+        "score_range": [
+          3,
+          5
+        ],
+        "pass_consistency": 1.0,
+        "coefficient_of_variation": 0.25
+      },
+      "validation_set_row3_gemini-2-5-flash_prompt": {
+        "runs_completed": 3,
+        "scores": [
+          5,
+          5,
+          5
+        ],
+        "score_mean": 5,
+        "score_std": 0.0,
+        "score_range": [
+          5,
+          5
+        ],
+        "pass_consistency": 1.0,
+        "coefficient_of_variation": 0.0
+      },
+      "validation_set_row4_gemini-2-5-flash_prompt": {
+        "runs_completed": 3,
+        "scores": [
+          1,
+          1,
+          1
+        ],
+        "score_mean": 1,
+        "score_std": 0.0,
+        "score_range": [
+          1,
+          1
+        ],
+        "pass_consistency": 1.0,
+        "coefficient_of_variation": 0.0
+      },
+      "validation_set_row5_gemini-2-5-flash_prompt": {
+        "runs_completed": 3,
+        "scores": [
+          5,
+          5,
+          5
+        ],
+        "score_mean": 5,
+        "score_std": 0.0,
+        "score_range": [
+          5,
+          5
+        ],
+        "pass_consistency": 1.0,
+        "coefficient_of_variation": 0.0
+      }
+    },
+    "full_analysis_available": 40
+  },
+  "summary_insights": {
+    "key_findings": [
+      "Good classification accuracy: 78.3%",
+      "Weak/no correlation with human judgments: r=0.067",
+      "Moderate consistency across reruns: 93.3% pass consistency"
+    ],
+    "recommendations": [
+      "Investigate differences between LLM and human evaluation criteria"
+    ]
+  }
+}
