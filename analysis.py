@@ -602,9 +602,9 @@ Examples:
             if args.filter_session:
                 analyzer.evaluation_data = [
                     item for item in analyzer.evaluation_data
-                    if item.get('session_name') == args.filter_session
+                    if args.filter_session in item.get('session_name', '')
                 ]
-                print(f"[INFO] Filtered to session '{args.filter_session}': {len(analyzer.evaluation_data)} evaluations")
+                print(f"[INFO] Filtered to session containing '{args.filter_session}': {len(analyzer.evaluation_data)} evaluations")
             
             if not analyzer.evaluation_data:
                 print("[ERROR] No evaluation data remaining after filtering.")

@@ -1,0 +1,110 @@
+{
+  "evaluation_summary": {
+    "total_evaluations": 15,
+    "unique_conditions": 5,
+    "runs_per_condition": 3,
+    "good_translations": {
+      "count": 0,
+      "passes": 0,
+      "pass_rate": 0
+    },
+    "bad_translations": {
+      "count": 15,
+      "passes": 6,
+      "pass_rate": 0.4
+    },
+    "overall_accuracy": 0.4,
+    "duration_minutes": 13.581801366666667,
+    "config_used": {
+      "csv_file": "validation_set.csv",
+      "row_start": 36,
+      "row_end": 40,
+      "use_agentic": true,
+      "llm_model": "gemini-2.5-flash",
+      "output_dir": "evaluation_results",
+      "reruns": 2,
+      "prompt_file": "prompts/final_judge_agentic.txt"
+    }
+  },
+  "rerun_statistics": {
+    "unique_conditions_evaluated": 5,
+    "runs_per_condition": 3,
+    "consistency_analysis": {
+      "validation_set_row36_gemini-2-5-flash_agentic": {
+        "runs_completed": 3,
+        "scores": [
+          3,
+          1,
+          1
+        ],
+        "score_mean": 1.6666666666666667,
+        "score_std": 0.9428090415820634,
+        "pass_consistency": 0.6666666666666666,
+        "score_range": [
+          1,
+          3
+        ]
+      },
+      "validation_set_row37_gemini-2-5-flash_agentic": {
+        "runs_completed": 3,
+        "scores": [
+          3,
+          3,
+          4
+        ],
+        "score_mean": 3.3333333333333335,
+        "score_std": 0.4714045207910317,
+        "pass_consistency": 0.0,
+        "score_range": [
+          3,
+          4
+        ]
+      },
+      "validation_set_row38_gemini-2-5-flash_agentic": {
+        "runs_completed": 3,
+        "scores": [
+          3,
+          4,
+          2
+        ],
+        "score_mean": 3.0,
+        "score_std": 0.816496580927726,
+        "pass_consistency": 0.3333333333333333,
+        "score_range": [
+          2,
+          4
+        ]
+      },
+      "validation_set_row39_gemini-2-5-flash_agentic": {
+        "runs_completed": 3,
+        "scores": [
+          3,
+          1,
+          2
+        ],
+        "score_mean": 2.0,
+        "score_std": 0.816496580927726,
+        "pass_consistency": 0.6666666666666666,
+        "score_range": [
+          1,
+          3
+        ]
+      },
+      "validation_set_row40_gemini-2-5-flash_agentic": {
+        "runs_completed": 3,
+        "scores": [
+          1,
+          3,
+          3
+        ],
+        "score_mean": 2.3333333333333335,
+        "score_std": 0.9428090415820634,
+        "pass_consistency": 0.3333333333333333,
+        "score_range": [
+          1,
+          3
+        ]
+      }
+    }
+  }
+}
