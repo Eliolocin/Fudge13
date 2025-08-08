@@ -1,0 +1,48 @@
+% Performance Metrics Comparison Table
+\begin{table}[h]
+\centering
+\caption{Performance Metrics Comparison: Prompt-engineered vs Agentic LLM Judge}
+\label{tab:performance_metrics}
+\begin{tabular}{lcc}
+\hline
+\textbf{Metric} & \textbf{Prompt-engineered} & \textbf{Agentic} \\
+\hline
+Accuracy & 0.783 & 0.525 \\
+Precision & 0.836 & 0.673 \\
+Recall & 0.813 & 0.467 \\
+F1-Score & 0.824 & 0.551 \\
+\hline
+\end{tabular}
+\end{table}
+
+% Descriptive Statistics Table
+\begin{table}[h]
+\centering
+\caption{Descriptive Statistics: LLM vs Human Scores}
+\label{tab:descriptive_stats}
+\begin{tabular}{lcccc}
+\hline
+\textbf{Method} & \textbf{Scorer} & \textbf{Mean} & \textbf{Std} & \textbf{Range} \\
+\hline
+Prompt-engineered & LLM & 3.61 & 1.42 & 1-5 \\
+ & Human & 3.38 & 1.55 & 1-5 \\
+Agentic & LLM & 2.77 & 1.64 & 1-5 \\
+ & Human & 3.38 & 1.55 & 1-5 \\
+\hline
+\end{tabular}
+\end{table}
+
+% Consistency Analysis Table
+\begin{table}[h]
+\centering
+\caption{Consistency Analysis: Pass Consistency and Score Variability}
+\label{tab:consistency}
+\begin{tabular}{lcccc}
+\hline
+\textbf{Method} & \textbf{Pass Consistency} & \textbf{Score Std} & \textbf{Correlation (r)} & \textbf{p-value} \\
+\hline
+Prompt-engineered & 0.933 & 0.628 & 0.067 & 1.874 \\
+Agentic & 0.833 & 0.922 & -0.049 & 0.593 \\
+\hline
+\end{tabular}
+\end{table}
