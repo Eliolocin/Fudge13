@@ -429,7 +429,7 @@ def create_confusion_matrices(prompt_data, agentic_data, output_path):
 
 def generate_latex_tables(prompt_data, agentic_data, output_path):
     """
-    Generate LaTeX tables for academic publication
+    Generate LaTeX tables for academic publication following paper format standards
     
     Args:
         prompt_data (dict): Prompt-engineered analysis results
@@ -440,11 +440,10 @@ def generate_latex_tables(prompt_data, agentic_data, output_path):
     
     # 1. Performance Metrics Table
     latex_content.append("% Performance Metrics Comparison Table")
-    latex_content.append("\\begin{table}[h]")
-    latex_content.append("\\centering")
+    latex_content.append("\\begin{table}[htbp]")
     latex_content.append("\\caption{Performance Metrics Comparison: Prompt-engineered vs Agentic LLM Judge}")
-    latex_content.append("\\label{tab:performance_metrics}")
-    latex_content.append("\\begin{tabular}{lcc}")
+    latex_content.append("\\begin{center}")
+    latex_content.append("\\begin{tabular}{|c|c|c|}")
     latex_content.append("\\hline")
     latex_content.append("\\textbf{Metric} & \\textbf{Prompt-engineered} & \\textbf{Agentic} \\\\")
     latex_content.append("\\hline")
@@ -454,21 +453,25 @@ def generate_latex_tables(prompt_data, agentic_data, output_path):
     a_metrics = agentic_data['classification_metrics']['metrics']
     
     latex_content.append(f"Accuracy & {p_metrics['accuracy']:.3f} & {a_metrics['accuracy']:.3f} \\\\")
+    latex_content.append("\\hline")
     latex_content.append(f"Precision & {p_metrics['precision']:.3f} & {a_metrics['precision']:.3f} \\\\")
+    latex_content.append("\\hline")
     latex_content.append(f"Recall & {p_metrics['recall']:.3f} & {a_metrics['recall']:.3f} \\\\")
+    latex_content.append("\\hline")
     latex_content.append(f"F1-Score & {p_metrics['f1_score']:.3f} & {a_metrics['f1_score']:.3f} \\\\")
     latex_content.append("\\hline")
     latex_content.append("\\end{tabular}")
+    latex_content.append("\\label{tab:performance_metrics}")
+    latex_content.append("\\end{center}")
     latex_content.append("\\end{table}")
     latex_content.append("")
     
     # 2. Descriptive Statistics Table
     latex_content.append("% Descriptive Statistics Table")
-    latex_content.append("\\begin{table}[h]")
-    latex_content.append("\\centering")
-    latex_content.append("\\caption{Descriptive Statistics: LLM vs Human Scores}")
-    latex_content.append("\\label{tab:descriptive_stats}")
-    latex_content.append("\\begin{tabular}{lcccc}")
+    latex_content.append("\\begin{table}[htbp]")
+    latex_content.append("\\caption{Descriptive Statistics: LLM vs Human Score Comparison}")
+    latex_content.append("\\begin{center}")
+    latex_content.append("\\begin{tabular}{|c|c|c|c|c|}")
     latex_content.append("\\hline")
     latex_content.append("\\textbf{Method} & \\textbf{Scorer} & \\textbf{Mean} & \\textbf{Std} & \\textbf{Range} \\\\")
     latex_content.append("\\hline")
@@ -479,24 +482,33 @@ def generate_latex_tables(prompt_data, agentic_data, output_path):
     a_llm = agentic_data['correlation_analysis']['descriptive_statistics']['llm_scores']
     a_human = agentic_data['correlation_analysis']['descriptive_statistics']['human_scores']
     
-    latex_content.append(f"Prompt-engineered & LLM & {p_llm['mean']:.2f} & {p_llm['std']:.2f} & {p_llm['min']:.0f}-{p_llm['max']:.0f} \\\\")
-    latex_content.append(f" & Human & {p_human['mean']:.2f} & {p_human['std']:.2f} & {p_human['min']:.0f}-{p_human['max']:.0f} \\\\")
-    latex_content.append(f"Agentic & LLM & {a_llm['mean']:.2f} & {a_llm['std']:.2f} & {a_llm['min']:.0f}-{a_llm['max']:.0f} \\\\")
-    latex_content.append(f" & Human & {a_human['mean']:.2f} & {a_human['std']:.2f} & {a_human['min']:.0f}-{a_human['max']:.0f} \\\\")
+    latex_content.append("\\multirow{2}{*}{\\textbf{Prompt-engineered}} & LLM & " + 
+                        f"{p_llm['mean']:.2f} & {p_llm['std']:.2f} & {p_llm['min']:.0f}-{p_llm['max']:.0f} \\\\")
+    latex_content.append("\\cline{2-5}")
+    latex_content.append(" & Human & " + 
+                        f"{p_human['mean']:.2f} & {p_human['std']:.2f} & {p_human['min']:.0f}-{p_human['max']:.0f} \\\\")
+    latex_content.append("\\hline")
+    latex_content.append("\\multirow{2}{*}{\\textbf{Agentic}} & LLM & " +
+                        f"{a_llm['mean']:.2f} & {a_llm['std']:.2f} & {a_llm['min']:.0f}-{a_llm['max']:.0f} \\\\")
+    latex_content.append("\\cline{2-5}")
+    latex_content.append(" & Human & " +
+                        f"{a_human['mean']:.2f} & {a_human['std']:.2f} & {a_human['min']:.0f}-{a_human['max']:.0f} \\\\")
     latex_content.append("\\hline")
     latex_content.append("\\end{tabular}")
+    latex_content.append("\\label{tab:descriptive_stats}")
+    latex_content.append("\\end{center}")
     latex_content.append("\\end{table}")
     latex_content.append("")
     
     # 3. Consistency Analysis Table
     latex_content.append("% Consistency Analysis Table")
-    latex_content.append("\\begin{table}[h]")
-    latex_content.append("\\centering")
-    latex_content.append("\\caption{Consistency Analysis: Pass Consistency and Score Variability}")
-    latex_content.append("\\label{tab:consistency}")
-    latex_content.append("\\begin{tabular}{lcccc}")
+    latex_content.append("\\begin{table}[htbp]")
+    latex_content.append("\\caption{Consistency Analysis and Correlation with Human Judgments}")
+    latex_content.append("\\begin{center}")
+    latex_content.append("\\begin{tabular}{|c|c|c|c|c|}")
     latex_content.append("\\hline")
-    latex_content.append("\\textbf{Method} & \\textbf{Pass Consistency} & \\textbf{Score Std} & \\textbf{Correlation (r)} & \\textbf{p-value} \\\\")
+    latex_content.append("\\textbf{Method} & \\textbf{Pass} & \\textbf{Score} & \\textbf{Correlation} & \\textbf{p-value} \\\\")
+    latex_content.append(" & \\textbf{Consistency} & \\textbf{Std} & \\textbf{(r)} & \\\\")
     latex_content.append("\\hline")
     
     # Extract consistency data
@@ -511,9 +523,12 @@ def generate_latex_tables(prompt_data, agentic_data, output_path):
     a_pval = agentic_data['correlation_analysis']['correlation_analysis']['p_value']
     
     latex_content.append(f"Prompt-engineered & {p_pass:.3f} & {p_std:.3f} & {p_corr:.3f} & {p_pval:.3f} \\\\")
+    latex_content.append("\\hline")
     latex_content.append(f"Agentic & {a_pass:.3f} & {a_std:.3f} & {a_corr:.3f} & {a_pval:.3f} \\\\")
     latex_content.append("\\hline")
     latex_content.append("\\end{tabular}")
+    latex_content.append("\\label{tab:consistency}")
+    latex_content.append("\\end{center}")
     latex_content.append("\\end{table}")
     latex_content.append("")
     
