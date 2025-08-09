@@ -11,6 +11,7 @@ import matplotlib.patches as patches
 import numpy as np
 import pandas as pd
 import seaborn as sns
+from scipy.stats import spearmanr
 from matplotlib.backends.backend_pdf import PdfPages
 from pathlib import Path
 
@@ -145,22 +146,50 @@ def extract_performance_metrics(prompt_data, agentic_data):
 
 def extract_correlation_data(prompt_data, agentic_data):
     """
-    Extract correlation analysis data for scatter plots
+    Extract correlation analysis data for scatter plots using true human scores from validation_set.csv
     
     Args:
         prompt_data (dict): Prompt-engineered analysis results  
         agentic_data (dict): Agentic analysis results
     
     Returns:
-        tuple: (prompt_pairs, agentic_pairs) DataFrames with LLM/Human score pairs
+        tuple: (prompt_pairs, agentic_pairs, prompt_corr, agentic_corr) with corrected human scores
     """
-    # 1. Extract paired data
-    prompt_pairs = pd.DataFrame(prompt_data['correlation_analysis']['paired_data'])
-    agentic_pairs = pd.DataFrame(agentic_data['correlation_analysis']['paired_data'])
+    # 1. Load true human scores from validation_set.csv
+    validation_csv_path = 'validation_set.csv'
+    try:
+        validation_df = pd.read_csv(validation_csv_path)
+        true_human_scores = validation_df['Final Score'].tolist()
+        print(f"[INFO] Using true human scores from validation_set.csv for correlation analysis")
+    except FileNotFoundError:
+        print(f"[WARNING] Could not find {validation_csv_path} for correlation analysis")
+        # Fallback to JSON data
+        prompt_pairs = pd.DataFrame(prompt_data['correlation_analysis']['paired_data'])
+        agentic_pairs = pd.DataFrame(agentic_data['correlation_analysis']['paired_data'])
+        prompt_corr = prompt_data['correlation_analysis']['correlation_analysis']['spearman_correlation']
+        agentic_corr = agentic_data['correlation_analysis']['correlation_analysis']['spearman_correlation']
+        return prompt_pairs, agentic_pairs, prompt_corr, agentic_corr
     
-    # 2. Add correlation stats
-    prompt_corr = prompt_data['correlation_analysis']['correlation_analysis']['spearman_correlation']
-    agentic_corr = agentic_data['correlation_analysis']['correlation_analysis']['spearman_correlation']
+    # 2. Extract LLM scores from analysis results
+    prompt_llm_scores = [item['llm_score'] for item in prompt_data['correlation_analysis']['paired_data']]
+    agentic_llm_scores = [item['llm_score'] for item in agentic_data['correlation_analysis']['paired_data']]
+    
+    # 3. Create corrected DataFrames with true human scores
+    prompt_pairs = pd.DataFrame({
+        'human_score': true_human_scores[:len(prompt_llm_scores)],  # Match length
+        'llm_score': prompt_llm_scores
+    })
+    
+    agentic_pairs = pd.DataFrame({
+        'human_score': true_human_scores[:len(agentic_llm_scores)],  # Match length  
+        'llm_score': agentic_llm_scores
+    })
+    
+    # 4. Recalculate correlation coefficients with true human scores
+    prompt_corr, _ = spearmanr(prompt_pairs['human_score'], prompt_pairs['llm_score'])
+    agentic_corr, _ = spearmanr(agentic_pairs['human_score'], agentic_pairs['llm_score'])
+    
+    print(f"[INFO] Recalculated correlations - Prompt: {prompt_corr:.3f}, Agentic: {agentic_corr:.3f}")
     
     return prompt_pairs, agentic_pairs, prompt_corr, agentic_corr
 
@@ -455,13 +484,17 @@ def create_confusion_matrices(prompt_data, agentic_data, output_path):
 # LATEX TABLE GENERATION
 # =============================================================================
 
-def generate_latex_tables(prompt_data, agentic_data, output_path):
+def generate_latex_tables(prompt_data, agentic_data, prompt_pairs, agentic_pairs, prompt_corr, agentic_corr, output_path):
     """
-    Generate LaTeX tables for academic publication following paper format standards
+    Generate LaTeX tables for academic publication using corrected human score data
     
     Args:
         prompt_data (dict): Prompt-engineered analysis results
         agentic_data (dict): Agentic analysis results
+        prompt_pairs (pd.DataFrame): Corrected prompt score pairs with true human scores
+        agentic_pairs (pd.DataFrame): Corrected agentic score pairs with true human scores
+        prompt_corr (float): Corrected prompt correlation coefficient
+        agentic_corr (float): Corrected agentic correlation coefficient
         output_path (str): Output file path for .txt file
     """
     latex_content = []
@@ -504,11 +537,24 @@ def generate_latex_tables(prompt_data, agentic_data, output_path):
     latex_content.append("\\textbf{Method} & \\textbf{Scorer} & \\textbf{Mean} & \\textbf{Std} & \\textbf{Range} \\\\")
     latex_content.append("\\hline")
     
-    # Extract descriptive stats
+    # Extract LLM descriptive stats from JSON (these are correct)
     p_llm = prompt_data['correlation_analysis']['descriptive_statistics']['llm_scores']
-    p_human = prompt_data['correlation_analysis']['descriptive_statistics']['human_scores']
     a_llm = agentic_data['correlation_analysis']['descriptive_statistics']['llm_scores']
-    a_human = agentic_data['correlation_analysis']['descriptive_statistics']['human_scores']
+    
+    # Calculate corrected human descriptive stats from true validation data
+    p_human = {
+        'mean': prompt_pairs['human_score'].mean(),
+        'std': prompt_pairs['human_score'].std(),
+        'min': prompt_pairs['human_score'].min(),
+        'max': prompt_pairs['human_score'].max()
+    }
+    
+    a_human = {
+        'mean': agentic_pairs['human_score'].mean(),
+        'std': agentic_pairs['human_score'].std(), 
+        'min': agentic_pairs['human_score'].min(),
+        'max': agentic_pairs['human_score'].max()
+    }
     
     latex_content.append("\\multirow{2}{*}{\\textbf{Prompt-engineered}} & LLM & " + 
                         f"{p_llm['mean']:.2f} & {p_llm['std']:.2f} & {p_llm['min']:.0f}-{p_llm['max']:.0f} \\\\")
@@ -539,16 +585,19 @@ def generate_latex_tables(prompt_data, agentic_data, output_path):
     latex_content.append(" & \\textbf{Consistency} & \\textbf{Std} & \\textbf{(r)} & \\\\")
     latex_content.append("\\hline")
     
-    # Extract consistency data
+    # Extract consistency data (pass consistency and std are LLM-internal, so these are correct)
     p_pass = prompt_data['variation_analysis']['variation_summary']['overall_pass_consistency']
     p_std = prompt_data['variation_analysis']['variation_summary']['overall_score_std']
-    p_corr = prompt_data['correlation_analysis']['correlation_analysis']['spearman_correlation']
-    p_pval = prompt_data['correlation_analysis']['correlation_analysis']['p_value']
-    
     a_pass = agentic_data['variation_analysis']['variation_summary']['overall_pass_consistency']
     a_std = agentic_data['variation_analysis']['variation_summary']['overall_score_std']
-    a_corr = agentic_data['correlation_analysis']['correlation_analysis']['spearman_correlation']
-    a_pval = agentic_data['correlation_analysis']['correlation_analysis']['p_value']
+    
+    # Use corrected correlation coefficients
+    p_corr = prompt_corr
+    a_corr = agentic_corr
+    
+    # Recalculate p-values with corrected data
+    _, p_pval = spearmanr(prompt_pairs['human_score'], prompt_pairs['llm_score'])
+    _, a_pval = spearmanr(agentic_pairs['human_score'], agentic_pairs['llm_score'])
     
     latex_content.append(f"Prompt-engineered & {p_pass:.3f} & {p_std:.3f} & {p_corr:.3f} & {p_pval:.3f} \\\\")
     latex_content.append("\\hline")
@@ -622,10 +671,10 @@ def main():
         os.path.join(OUTPUT_DIR, 'confusion_matrices.pdf')
     )
     
-    # 6. Generate LaTeX tables
+    # 6. Generate LaTeX tables with corrected human score data
     print("\n[INFO] Generating LaTeX tables...")
     generate_latex_tables(
-        prompt_data, agentic_data,
+        prompt_data, agentic_data, prompt_pairs, agentic_pairs, prompt_corr, agentic_corr,
         os.path.join(OUTPUT_DIR, 'analysis_tables.txt')
     )
     
