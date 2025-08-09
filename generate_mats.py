@@ -214,57 +214,85 @@ def create_performance_comparison(metrics_df, output_path):
 
 def create_score_distributions(prompt_data, agentic_data, output_path):
     """
-    Create score distribution analysis with box plots
+    Create combined score distribution analysis showing Prompt, Agentic, and Human scores together
     
     Args:
         prompt_data (dict): Prompt-engineered analysis results
         agentic_data (dict): Agentic analysis results  
         output_path (str): Output file path
     """
-    # 1. Extract score data
+    # 1. Extract LLM score data from analysis results
     prompt_pairs = pd.DataFrame(prompt_data['correlation_analysis']['paired_data'])
     agentic_pairs = pd.DataFrame(agentic_data['correlation_analysis']['paired_data'])
     
-    # 2. Create figure with subplots
-    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 6))
+    # 2. Load human scores directly from validation_set.csv to get true distribution
+    validation_csv_path = 'validation_set.csv'
+    try:
+        validation_df = pd.read_csv(validation_csv_path)
+        human_scores = validation_df['Final Score'].tolist()
+        print(f"[INFO] Loaded {len(human_scores)} human scores directly from validation_set.csv")
+        print(f"[INFO] Human score range: {min(human_scores)}-{max(human_scores)}")
+    except FileNotFoundError:
+        print(f"[WARNING] Could not find {validation_csv_path}, using scores from analysis JSON")
+        human_scores = prompt_pairs['human_score'].tolist()
     
-    # 3. LLM Score Distributions
-    ax1.boxplot([prompt_pairs['llm_score'], agentic_pairs['llm_score']], 
-                labels=['Prompt-engineered', 'Agentic'],
-                patch_artist=True,
-                boxprops=dict(facecolor=PROMPT_COLOR, alpha=0.7),
-                medianprops=dict(color='black', linewidth=2))
+    # 3. Create single figure for combined comparison
+    fig, ax = plt.subplots(figsize=(12, 8))
     
-    # Update colors for second box
-    boxes = ax1.findobj(patches.PathPatch)
-    if len(boxes) >= 2:
-        boxes[1].set_facecolor(AGENTIC_COLOR)
+    # 4. Prepare data for combined box plot
+    score_data = [
+        prompt_pairs['llm_score'],
+        agentic_pairs['llm_score'], 
+        human_scores  # True human ground truth from validation_set.csv
+    ]
     
-    ax1.set_title('LLM Score Distributions' if SHOW_TITLE else '')
-    ax1.set_ylabel('LLM Score')
-    ax1.set_ylim(0.5, 5.5)
+    labels = ['Prompt LLM', 'Agentic LLM', 'Human']
+    colors = [PROMPT_COLOR, AGENTIC_COLOR, '#FF69B4']  # Pink for human scores
     
-    # 4. Human Score Distributions  
-    ax2.boxplot([prompt_pairs['human_score'], agentic_pairs['human_score']],
-                labels=['Prompt-engineered', 'Agentic'],
-                patch_artist=True,
-                boxprops=dict(facecolor=PROMPT_COLOR, alpha=0.7),
-                medianprops=dict(color='black', linewidth=2))
+    # 4. Create box plot with all three score distributions
+    bp = ax.boxplot(score_data, 
+                    labels=labels,
+                    patch_artist=True,
+                    medianprops=dict(color='black', linewidth=2),
+                    showmeans=True,
+                    meanprops=dict(marker='D', markerfacecolor='red', markeredgecolor='red', markersize=6))
     
-    # Update colors for second box
-    boxes2 = ax2.findobj(patches.PathPatch)
-    if len(boxes2) >= 2:
-        boxes2[1].set_facecolor(AGENTIC_COLOR)
+    # 5. Set colors for each box
+    for patch, color in zip(bp['boxes'], colors):
+        patch.set_facecolor(color)
+        patch.set_alpha(0.7)
     
-    ax2.set_title('Human Score Distributions' if SHOW_TITLE else '')
-    ax2.set_ylabel('Human Score')
-    ax2.set_ylim(0.5, 5.5)
+    # 6. Customize the plot
+    ax.set_title('Score Distributions: LLM Judges vs Human Evaluation' if SHOW_TITLE else '')
+    ax.set_ylabel('Score (1-5 scale)')
+    ax.set_ylim(0.5, 5.5)
+    ax.grid(True, alpha=0.3, axis='y')
     
-    # 5. Save to PDF
+    # 7. Add statistical annotations
+    # Calculate and display mean scores as text
+    prompt_mean = prompt_pairs['llm_score'].mean()
+    agentic_mean = agentic_pairs['llm_score'].mean()
+    human_mean = np.mean(human_scores)  # Use actual human scores from CSV
+    
+    means_text = f'Means: Prompt={prompt_mean:.2f}, Agentic={agentic_mean:.2f}, Human={human_mean:.2f}'
+    ax.text(0.02, 0.98, means_text, transform=ax.transAxes, 
+           bbox=dict(boxstyle="round,pad=0.3", facecolor='white', alpha=0.8),
+           verticalalignment='top', fontsize=FONT_SIZE-2)
+    
+    # 8. Add legend explaining the colors
+    from matplotlib.patches import Patch
+    legend_elements = [
+        Patch(facecolor=PROMPT_COLOR, alpha=0.7, label='Prompt-engineered LLM'),
+        Patch(facecolor=AGENTIC_COLOR, alpha=0.7, label='Agentic LLM'), 
+        Patch(facecolor='#FF69B4', alpha=0.7, label='Human Ground Truth')
+    ]
+    ax.legend(handles=legend_elements, loc='upper right', bbox_to_anchor=(0.98, 0.85))
+    
+    # 9. Save to PDF
     plt.tight_layout()
     plt.savefig(output_path)
     plt.close()
-    print(f"[OK] Generated: {output_path}")
+    print(f"[OK] Generated combined score distribution: {output_path}")
 
 def create_correlation_analysis(prompt_pairs, agentic_pairs, prompt_corr, agentic_corr, output_path):
     """
