@@ -1,9 +1,0 @@
-{
-  "csv_file": "validation_set.csv",
-  "row_start": 1,
-  "row_end": null,
-  "use_agentic": false,
-  "llm_model": "gemini-2.5-flash",
-  "output_dir": "evaluation_results",
-  "reruns": 2
-}

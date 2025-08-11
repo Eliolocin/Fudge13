@@ -75,8 +75,8 @@ class FunctionCallLogger:
         """
         api_call_entry = {
             "service": service,
-            "request": str(request)[:500] if request else None,  # Truncate long requests
-            "response": str(response)[:1000] if response else None,  # Truncate long responses
+            "request": str(request) if request else None,  # Full request
+            "response": str(response) if response else None,  # Full response
             "execution_time_ms": execution_time_ms,
             "timestamp": datetime.now().isoformat()
         }
@@ -99,7 +99,7 @@ class FunctionCallLogger:
         """
         sub_agent_entry = {
             "agent_type": agent_type,
-            "response": str(sub_response)[:1000] if sub_response else None,
+            "response": str(sub_response) if sub_response else None,  # Full response
             "execution_time_ms": execution_time_ms,
             "timestamp": datetime.now().isoformat()
         }
@@ -145,7 +145,7 @@ class FunctionCallLogger:
                     log_entry["execution_time_ms"] = round(execution_time_ms, 2)
                     log_entry["success"] = success
                     log_entry["error"] = error
-                    log_entry["return_value"] = str(return_value)[:1000] if return_value else None
+                    log_entry["return_value"] = str(return_value) if return_value else None  # Full return value
                     break
     
     def get_logs(self) -> List[Dict[str, Any]]:
@@ -347,11 +347,52 @@ def execute_search_expert(search_query: str, evaluation_context: str) -> Dict[st
         # Create a separate Gemini client for search-grounded research (sub-agent pattern)
         search_client = genai.Client(api_key=api_key)
         
+        # Add fallback search strategies for incomplete queries
+        enhanced_context = evaluation_context
+        enhanced_query = search_query
+        
+        # Generate additional context and search suggestions for better results
+        if len(search_query.strip()) < 20 or "show" not in search_query.lower():
+            # Query seems incomplete - enhance it with general Filipino translation context
+            context_lower = evaluation_context.lower()
+            
+            # Add general search terms based on evaluation context
+            fallback_terms = []
+            if "cartoon" in context_lower or "animation" in context_lower:
+                fallback_terms.append("Filipino cartoon dubbing translation practices")
+            if "cultural" in context_lower:
+                fallback_terms.append("Filipino cultural translation patterns")
+            if any(term in context_lower for term in ["slang", "expression", "idiom"]):
+                fallback_terms.append("Filipino slang translation examples")
+            if "modern" in context_lower or "current" in context_lower:
+                fallback_terms.append("modern Filipino translation trends")
+            
+            # Always add these general helpful terms
+            fallback_terms.extend([
+                "Filipino translation guidelines animation dubbing",
+                "Taglish code-switching cartoon translation",
+                "Filipino audience preferences dubbing"
+            ])
+            
+            enhanced_query = f"{search_query}. Additional research areas: {', '.join(fallback_terms)}"
+            enhanced_context = f"{evaluation_context}. Note: Search broadly for Filipino translation patterns, dubbing practices, and cultural context even if specific show information is unavailable."
+        
         # Enhanced research prompt for comprehensive cultural investigation
+        # ALWAYS research something helpful, even with incomplete information
         research_prompt = f"""You are a Filipino cultural and linguistic research expert helping evaluate English-to-Filipino translations with deep cultural awareness.
 
-CONTEXT: {evaluation_context}
-RESEARCH QUERY: {search_query}
+CONTEXT: {enhanced_context}
+RESEARCH QUERY: {enhanced_query}
+
+## RESEARCH APPROACH:
+**CRITICAL INSTRUCTION**: ALWAYS find and provide useful research, even if the query lacks specific details like show names or complete context. Be resourceful and search for related information that can help evaluate the translation.
+
+**IF MISSING SPECIFIC INFORMATION**: 
+- Search for general patterns in Filipino translation/dubbing
+- Research similar expressions, themes, or cultural concepts  
+- Look for Filipino media that use similar language patterns
+- Find Filipino cultural context for the type of content being translated
+- Research current Filipino slang, expressions, or trending language
 
 Please conduct COMPREHENSIVE research covering these areas:
 
@@ -360,39 +401,46 @@ Please conduct COMPREHENSIVE research covering these areas:
    - Historical, political, or social references
    - Religious or spiritual contexts in Filipino culture
    - Regional variations across Philippines (Luzon, Visayas, Mindanao)
+   - General cultural patterns relevant to the translation style
 
 2. **Pop Culture & Media Analysis**:
-   - Filipino movies, TV shows, music that reference similar content
-   - Memes, social media trends, viral content
+   - Filipino movies, TV shows, music that reference similar content OR similar translation styles
+   - Memes, social media trends, viral content related to the topic
    - Celebrity culture, entertainment industry context
    - Online communities and fandoms
+   - General cartoon/animation dubbing practices in Philippines
 
 3. **Current Filipino Usage Patterns**:
    - How modern Filipinos actually use/translate such expressions
    - Generational differences (Gen Z, Millennials, older generations)
    - Social media language, texting, informal communication
    - Code-switching patterns (Taglish usage)
+   - Contemporary Filipino language trends
 
 4. **Translation Standards & Guidelines**:
    - Official Filipino translation guidelines
    - Academic/scholarly translation practices
    - Media dubbing/subtitling standards
    - Government and educational institution practices
+   - Industry best practices for cartoon/animation dubbing
 
 5. **Linguistic & Semantic Analysis**:
    - Equivalent Filipino idioms or expressions
    - Loan words vs. native translations debate
    - Semantic fields and connotations in Filipino
    - Register appropriateness (formal vs. informal)
+   - Alternative translation approaches
 
 ## OUTPUT REQUIREMENTS:
+- ALWAYS provide useful research findings, never refuse due to incomplete information
 - Include specific examples from Filipino media/culture when found
 - Note regional variations if applicable  
 - Mention generational usage differences
 - Cite current trends or recent developments
 - Provide alternative translation options if better ones exist
+- If specific show context is unavailable, research general patterns for similar content types
 
-Be thorough, specific, and culturally nuanced in your research."""
+**REMEMBER**: Your goal is to ALWAYS be helpful by finding relevant cultural, linguistic, or translation insights, regardless of how specific or vague the initial query might be."""
         
         # Create sub-agent configuration with Google Search only (no custom functions)
         search_config = create_search_only_config(include_thoughts=True)
@@ -417,7 +465,7 @@ Be thorough, specific, and culturally nuanced in your research."""
                 "model": "gemini-2.5-flash",
                 "search_grounded": True,
                 "response_length": len(research_content),
-                "response_preview": research_content[:200] + "..." if len(research_content) > 200 else research_content
+                "full_response": research_content  # Full response instead of preview
             },
             round((sub_agent_end_time - sub_agent_start_time) * 1000, 2)
         )
@@ -445,7 +493,7 @@ Be thorough, specific, and culturally nuanced in your research."""
             "insights_found": insights,
             "research_areas_covered": sum([1 for v in insights.values() if v]),
             "comprehensive_research": insights["comprehensive_research"],
-            "key_findings_preview": research_content[:300] + "..." if len(research_content) > 300 else research_content
+            "full_research_findings": research_content  # Full findings instead of preview
         }
         function_call_logger.log_processing_result(call_id, processed_result)
         

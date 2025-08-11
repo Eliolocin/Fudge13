@@ -29,11 +29,11 @@ F1-Score & 0.824 & 0.551 \\
 \hline
 \multirow{2}{*}{\textbf{Prompt-engineered}} & LLM & 3.61 & 1.42 & 1-5 \\
 \cline{2-5}
- & Human & 4.80 & 0.42 & 4-5 \\
+ & Human & 4.70 & 0.48 & 4-5 \\
 \hline
 \multirow{2}{*}{\textbf{Agentic}} & LLM & 2.77 & 1.64 & 1-5 \\
 \cline{2-5}
- & Human & 4.80 & 0.42 & 4-5 \\
+ & Human & 4.70 & 0.48 & 4-5 \\
 \hline
 \end{tabular}
 \label{tab:descriptive_stats}
@@ -49,9 +49,9 @@ F1-Score & 0.824 & 0.551 \\
 \textbf{Method} & \textbf{Pass} & \textbf{Score} & \textbf{Correlation} & \textbf{p-value} \\
  & \textbf{Consistency} & \textbf{Std} & \textbf{(r)} & \\
 \hline
-Prompt-engineered & 0.933 & 0.628 & -0.181 & 0.617 \\
+Prompt-engineered & 0.933 & 0.628 & 0.592 & 0.072 \\
 \hline
-Agentic & 0.833 & 0.922 & -0.198 & 0.584 \\
+Agentic & 0.833 & 0.922 & -0.518 & 0.125 \\
 \hline
 \end{tabular}
 \label{tab:consistency}
